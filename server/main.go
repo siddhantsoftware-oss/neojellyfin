@@ -1,16 +1,11 @@
 package main
 
 import (
-	"net/http"
 	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
-
-func helloWorld(c *gin.Context) {
-	c.String(http.StatusOK, "Hello, World!")
-}
 
 func main() {
 	router := gin.Default()
@@ -22,6 +17,8 @@ func main() {
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
-	router.GET("/hello", helloWorld)
+
+	router.GET("/config", getConfig)
+	router.POST("/config/server", addServerAddress)
 	router.Run(":3000")
 }
