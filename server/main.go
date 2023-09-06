@@ -20,5 +20,7 @@ func main() {
 
 	router.GET("/config", getConfig)
 	router.POST("/config/server", addServerAddress)
+	router.POST("/config/user", logUserIn)
+	router.GET("/config/address", getServerAddress)
 	router.Run(":3000")
 }

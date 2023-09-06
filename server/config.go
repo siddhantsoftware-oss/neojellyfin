@@ -45,9 +45,9 @@ func getConfig(c *gin.Context) {
 	}
 	var readableServerInfo ServerInfo
 	json.NewDecoder(serverInfo.Body).Decode(&readableServerInfo)
-	c.SetCookie("serverId", readableServerInfo.Id, 10000000, "/", "siddhantsoftware.com", false, true)
-	c.SetCookie("serverName", readableServerInfo.ServerName, 10000000, "/", "siddhantsoftware.com", false, true)
-	c.SetCookie("serverVersion", readableServerInfo.Version, 10000000, "/", "siddhantsoftware.com", false, true)
+	c.SetCookie("serverId", readableServerInfo.Id, 10000000, "/", "siddhantsoftware", false, true)
+	c.SetCookie("serverName", readableServerInfo.ServerName, 10000000, "/", "siddhantsoftware", false, true)
+	c.SetCookie("serverVersion", readableServerInfo.Version, 10000000, "/", "siddhantsoftware", false, true)
 
 	username, err := c.Cookie("username")
 	if err != nil {
@@ -85,7 +85,7 @@ func getConfig(c *gin.Context) {
 	deviceId, err := c.Cookie("deviceId")
 	if err != nil {
 		deviceId = uuid.NewString()
-		c.SetCookie("deviceId", deviceId, 10000000, "/", "siddhantsoftware.com", false, true)
+		c.SetCookie("deviceId", deviceId, 10000000, "/", "siddhantsoftware", false, true)
 	}
 
 	req.Header.Set("Content-Type", "application/json")
@@ -116,24 +116,44 @@ func addServerAddress(c *gin.Context) {
 	}
 	var readableServerInfo ServerInfo
 	json.NewDecoder(res.Body).Decode(&readableServerInfo)
-	c.SetCookie("serverId", readableServerInfo.Id, 10000000, "/", "siddhantsoftware.com", false, true)
-	c.SetCookie("serverName", readableServerInfo.ServerName, 10000000, "/", "siddhantsoftware.com", false, true)
-	c.SetCookie("serverVersion", readableServerInfo.Version, 10000000, "/", "siddhantsoftware.com", false, true)
-
-	c.SetCookie("address", serverAddress.ServerAddress, 50000000, "/", "siddhantsoftware.com", false, true)
+	c.SetCookie("serverId", readableServerInfo.Id, 10000000, "/", "siddhantsoftware", false, true)
+	c.SetCookie("serverName", readableServerInfo.ServerName, 10000000, "/", "siddhantsoftware", false, true)
+	c.SetCookie("serverVersion", readableServerInfo.Version, 10000000, "/", "siddhantsoftware", false, true)
+	c.SetCookie("address", serverAddress.ServerAddress, 50000000, "/", "siddhantsoftware", false, true)
 	c.JSON(http.StatusOK, Config{
 		Message: "Server is valid",
 	})
 }
 
-func makeRequestToJellyfin(method string, request string, body interface{}, c *gin.Context) {
+type UserInfo struct {
+	Username string `json:"Username"`
+	Pw       string `json:"Pw"`
+}
+
+func logUserIn(c *gin.Context) {
+	var userInfo UserInfo
+	c.BindJSON(&userInfo)
+	res, err := makeRequestToJellyfin("POST", "/Users/AuthenticateByName", userInfo, c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, Config{Message: "There was an error with the Jellyfin server"})
+		panic(err)
+	}
+	c.JSON(200, res)
+}
+
+type Response struct {
+	Code int
+	Body any
+}
+
+func makeRequestToJellyfin(method string, request string, body any, c *gin.Context) (*http.Response, error) {
 	address, _ := c.Cookie("address")
 	marshalled, _ := json.Marshal(body)
 	req, _ := http.NewRequest("POST", address+request, bytes.NewReader(marshalled))
 	deviceId, err := c.Cookie("deviceId")
 	if err != nil {
 		deviceId = uuid.NewString()
-		c.SetCookie("deviceId", deviceId, 10000000, "/", "siddhantsoftware.com", false, true)
+		c.SetCookie("deviceId", deviceId, 10000000, "/", "siddhantsoftware", false, true)
 	}
 	accessToken, err := c.Cookie("AccessToken")
 
@@ -145,7 +165,23 @@ func makeRequestToJellyfin(method string, request string, body interface{}, c *g
 	req.Header.Set("Authorization", "MediaBrowser Client=\"NeoJellyfin\", Device=\"Chrome\", DeviceId=\""+deviceId+"\", Version=\"0.3.1\", Token=\""+accessToken+"\"")
 	client := http.Client{Timeout: 10 * time.Second}
 	res, err := client.Do(req)
+	return res, err
+}
 
-	c.JSON(res.StatusCode, res.Body)
-
+func getServerAddress(c *gin.Context) {
+	address, err := c.Cookie("address")
+	type Res struct {
+		Message string `json:"message"`
+		Address string `json:"address"`
+	}
+	if err != nil {
+		c.JSON(400, Res{
+			Message: "Could not find",
+		})
+		panic(err)
+	}
+	c.JSON(200, Res{
+		Message: "Found successfuly",
+		Address: address,
+	})
 }

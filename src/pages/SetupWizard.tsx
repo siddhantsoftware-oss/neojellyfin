@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { apiServerUrl } from "../_main";
 import { LoadingSpinner } from "../components/Loading";
 
@@ -11,12 +11,30 @@ function SetupWizard() {
         body: JSON.stringify({
           ServerAddress: newAddress,
         }),
+        credentials: "include",
       }).then((res) => {
         if (!res.ok) {
           throw Error("Could not find server");
         }
       }),
   });
+
+  const { isError: addressNotAvailable } = useQuery(
+    "serverAddress",
+    () =>
+      fetch(`${apiServerUrl}/config/address`, {
+        credentials: "include",
+      }).then((res) => {
+        if (!res.ok) {
+          throw Error("Could not server address");
+        } else {
+          return res.json();
+        }
+      }),
+    {
+      retry: false,
+    }
+  );
 
   const [newAddress, setNewAddress] = useState("");
   const [username, setUsername] = useState("");
@@ -25,10 +43,10 @@ function SetupWizard() {
   return (
     <div className="h-screen w-full place-items-center justify-center flex">
       <div className="flex flex-col gap-y-3 items-center relative bg-white/20 px-5 py-10 rounded-md backdrop-blur-xl">
-        <div className="text-2xl font-semibold">Setup Wizard</div>
+        <div className="text-2xl font-semibold">Login</div>
         <div>
           {" "}
-          {updateAddress.isSuccess ? (
+          {updateAddress.isSuccess || !addressNotAvailable ? (
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -46,7 +64,7 @@ function SetupWizard() {
               />
               <input
                 value={password}
-                type="text"
+                type="password"
                 placeholder="Password"
                 className="bg-accent px-5 py-2 outline-none w-[300px] rounded-md"
                 required
