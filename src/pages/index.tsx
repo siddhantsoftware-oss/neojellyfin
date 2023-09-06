@@ -1,9 +1,5 @@
-import React from 'react'
-
 function IndexPage() {
-  return (
-    <div>IndexPage</div>
-  )
+  return <div>IndexPage</div>;
 }
 
-export default IndexPage
+export default IndexPage;
