@@ -141,6 +141,15 @@ func logUserIn(c *gin.Context) {
 	if res.StatusCode == 200 {
 		c.SetCookie("username", userInfo.Username, int(time.Second)*604800, "/", "localhost", false, true)
 		c.SetCookie("password", userInfo.Pw, int(time.Second)*604800, "/", "localhost", false, true)
+		type User struct {
+			Id string
+		}
+		type Data struct {
+			User User
+		}
+		var data Data
+		json.NewDecoder(res.Body).Decode(&data)
+		c.SetCookie("userId", data.User.Id, int(time.Second)*604800, "/", "localhost", false, true)
 
 	}
 	c.JSON(res.StatusCode, res.Body)
