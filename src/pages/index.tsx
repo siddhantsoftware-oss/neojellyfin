@@ -1,18 +1,35 @@
 import { useQuery } from "react-query";
 import { apiServerUrl } from "../_main";
+import Loading from "../components/Loading";
+import Router from "../router";
+import SetupWizard from "./SetupWizard";
 
 function Index() {
-  const { data, isLoading } = useQuery("hello", async () =>
-    fetch(`${apiServerUrl}/hello`, {
-      headers: { Accept: "application/json" },
-    }).then((res) => res.text())
+  const { data: config, isLoading } = useQuery(
+    "hello",
+    async () =>
+      fetch(`${apiServerUrl}/config`, {
+        headers: { Accept: "application/json" },
+        credentials: "include",
+      }),
+    {
+      retry: false,
+    }
   );
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (config && !config.ok) {
+    return <SetupWizard />;
   }
 
-  return <div>{data}</div>;
+  if (isLoading) {
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
+  }
+
+  return <Router />;
 }
 
 export default Index;
