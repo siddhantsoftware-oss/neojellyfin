@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./styles/index.css";
 
 import { QueryClient, QueryClientProvider } from "react-query";
-import Index from "./pages";
+import Index from "./pages/root";
 
 const queryClient = new QueryClient();
 

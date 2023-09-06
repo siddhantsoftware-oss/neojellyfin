@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { apiServerUrl } from "../_main";
 import { LoadingSpinner } from "../components/Loading";
 
@@ -17,6 +17,27 @@ function SetupWizard() {
           throw Error("Could not find server");
         }
       }),
+  });
+
+  const client = useQueryClient()
+
+  const logInMutation = useMutation({
+    mutationFn: async ({
+      username,
+      password,
+    }: {
+      username: string;
+      password: string;
+    }) =>
+      fetch(`${apiServerUrl}/config/user`, {
+        method: "POST",
+        body: JSON.stringify({
+          Username: username,
+          Pw: password,
+        }),
+        credentials: "include",
+      }),
+      onSuccess: ()=> client.invalidateQueries("config")
   });
 
   const { isError: addressNotAvailable } = useQuery(
@@ -37,8 +58,8 @@ function SetupWizard() {
   );
 
   const [newAddress, setNewAddress] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [newUsername, setUsername] = useState("");
+  const [newPassword, setPassword] = useState("");
 
   return (
     <div className="h-screen w-full place-items-center justify-center flex">
@@ -50,12 +71,15 @@ function SetupWizard() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                updateAddress.mutate(newAddress);
+                logInMutation.mutate({
+                  password: newPassword,
+                  username: newUsername,
+                });
               }}
               className="flex flex-col gap-y-3 "
             >
               <input
-                value={username}
+                value={newUsername}
                 type="text"
                 placeholder="Username"
                 className="bg-accent px-5 py-2 outline-none w-[300px] rounded-md"
@@ -63,7 +87,7 @@ function SetupWizard() {
                 onChange={(e) => setUsername(e.target.value)}
               />
               <input
-                value={password}
+                value={newPassword}
                 type="password"
                 placeholder="Password"
                 className="bg-accent px-5 py-2 outline-none w-[300px] rounded-md"

@@ -45,9 +45,9 @@ func getConfig(c *gin.Context) {
 	}
 	var readableServerInfo ServerInfo
 	json.NewDecoder(serverInfo.Body).Decode(&readableServerInfo)
-	c.SetCookie("serverId", readableServerInfo.Id, 10000000, "/", "siddhantsoftware", false, true)
-	c.SetCookie("serverName", readableServerInfo.ServerName, 10000000, "/", "siddhantsoftware", false, true)
-	c.SetCookie("serverVersion", readableServerInfo.Version, 10000000, "/", "siddhantsoftware", false, true)
+	c.SetCookie("serverId", readableServerInfo.Id, 10000000, "/", "localhost", false, true)
+	c.SetCookie("serverName", readableServerInfo.ServerName, 10000000, "/", "localhost", false, true)
+	c.SetCookie("serverVersion", readableServerInfo.Version, 10000000, "/", "localhost", false, true)
 
 	username, err := c.Cookie("username")
 	if err != nil {
@@ -85,7 +85,7 @@ func getConfig(c *gin.Context) {
 	deviceId, err := c.Cookie("deviceId")
 	if err != nil {
 		deviceId = uuid.NewString()
-		c.SetCookie("deviceId", deviceId, 10000000, "/", "siddhantsoftware", false, true)
+		c.SetCookie("deviceId", deviceId, 10000000, "/", "localhost", false, true)
 	}
 
 	req.Header.Set("Content-Type", "application/json")
@@ -116,10 +116,10 @@ func addServerAddress(c *gin.Context) {
 	}
 	var readableServerInfo ServerInfo
 	json.NewDecoder(res.Body).Decode(&readableServerInfo)
-	c.SetCookie("serverId", readableServerInfo.Id, 10000000, "/", "siddhantsoftware", false, true)
-	c.SetCookie("serverName", readableServerInfo.ServerName, 10000000, "/", "siddhantsoftware", false, true)
-	c.SetCookie("serverVersion", readableServerInfo.Version, 10000000, "/", "siddhantsoftware", false, true)
-	c.SetCookie("address", serverAddress.ServerAddress, 50000000, "/", "siddhantsoftware", false, true)
+	c.SetCookie("serverId", readableServerInfo.Id, 10000000, "/", "localhost", false, true)
+	c.SetCookie("serverName", readableServerInfo.ServerName, 10000000, "/", "localhost", false, true)
+	c.SetCookie("serverVersion", readableServerInfo.Version, 10000000, "/", "localhost", false, true)
+	c.SetCookie("address", serverAddress.ServerAddress, 50000000, "/", "localhost", false, true)
 	c.JSON(http.StatusOK, Config{
 		Message: "Server is valid",
 	})
@@ -138,7 +138,12 @@ func logUserIn(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, Config{Message: "There was an error with the Jellyfin server"})
 		panic(err)
 	}
-	c.JSON(200, res)
+	if res.StatusCode == 200 {
+		c.SetCookie("username", userInfo.Username, int(time.Second)*604800, "/", "localhost", false, true)
+		c.SetCookie("password", userInfo.Pw, int(time.Second)*604800, "/", "localhost", false, true)
+
+	}
+	c.JSON(res.StatusCode, res.Body)
 }
 
 type Response struct {
@@ -153,7 +158,7 @@ func makeRequestToJellyfin(method string, request string, body any, c *gin.Conte
 	deviceId, err := c.Cookie("deviceId")
 	if err != nil {
 		deviceId = uuid.NewString()
-		c.SetCookie("deviceId", deviceId, 10000000, "/", "siddhantsoftware", false, true)
+		c.SetCookie("deviceId", deviceId, 10000000, "/", "localhost", false, true)
 	}
 	accessToken, err := c.Cookie("AccessToken")
 

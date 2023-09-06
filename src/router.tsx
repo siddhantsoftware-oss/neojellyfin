@@ -1,14 +1,12 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Index from "./pages";
+import IndexPage from "./pages";
 
-function Router() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Index />} />
-      </Routes>
-    </BrowserRouter>
-  );
-}
+const AppRouter = () => (
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<IndexPage />} />
+    </Routes>
+  </BrowserRouter>
+);
 
-export default Router;
+export default AppRouter;
