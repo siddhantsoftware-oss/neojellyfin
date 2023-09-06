@@ -42,7 +42,7 @@ function SetupWizard() {
                 placeholder="Username"
                 className="bg-accent px-5 py-2 outline-none w-[300px] rounded-md"
                 required
-                onChange={(e) => setNewAddress(e.target.value)}
+                onChange={(e) => setUsername(e.target.value)}
               />
               <input
                 value={password}
@@ -50,7 +50,7 @@ function SetupWizard() {
                 placeholder="Password"
                 className="bg-accent px-5 py-2 outline-none w-[300px] rounded-md"
                 required
-                onChange={(e) => setNewAddress(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <button className="bg-primary py-1.5 uppercase font-semibold hover:opacity-70 transition rounded-md">
                 Sign in
