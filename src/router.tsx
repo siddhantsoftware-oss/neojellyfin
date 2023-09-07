@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import IndexPage from "./pages";
+import IndexPage from "./pages/home";
 import Nav from "./components/navbar";
 
 const AppRouter = () => (

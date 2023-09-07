@@ -41,22 +41,8 @@ function RecentlyAdded() {
       .then((result) => result as MediaType[])
   );
 
-  if (isLoading) {
-    return (
-      <div className="flex overflow-hidden my-10 gap-x-4 p-5">
-        <div className="h-[377.5px] shrink-0 w-[600px] bg-accent animate-pulse  rounded-md"></div>
-        <div className="h-[377.5px] shrink-0 w-[600px] bg-accent animate-pulse  rounded-md"></div>
-        <div className="h-[377.5px] shrink-0 w-[600px] bg-accent animate-pulse  rounded-md"></div>
-        <div className="h-[377.5px] shrink-0 w-[600px] bg-accent animate-pulse  rounded-md"></div>
-        <div className="h-[377.5px] shrink-0 w-[600px] bg-accent animate-pulse  rounded-md"></div>
-        <div className="h-[377.5px] shrink-0 w-[600px] bg-accent animate-pulse  rounded-md"></div>
-        <div className="h-[377.5px] shrink-0 w-[600px] bg-accent animate-pulse  rounded-md"></div>
-      </div>
-    );
-  }
-
   return (
-    <div className="flex py-10 flex-col gap-y-3">
+    <div className="flex my-10 flex-col min-h-[337.5px]  gap-y-3">
       <Marquee speed={40} pauseOnHover>
         {data?.map((media, idx) => {
           const backdropTag =
@@ -67,10 +53,10 @@ function RecentlyAdded() {
           return (
             <div
               key={idx}
-              className="shrink-0 group/cover relative transition overflow-clip mx-2 rounded-md"
+              className="shrink-0 group/cover  relative transition overflow-clip mx-2 rounded-md"
             >
-              <div className="absolute top-0 left-0 h-full w-full transition group-hover/cover:bg-black/40 group-hover/cover:backdrop-blur-sm ">
-                <div className="group-hover/cover:visible h-full flex flex-col justify-between invisible transition p-5">
+              <div className="absolute  top-0 left-0 h-full w-full transition group-hover/cover:bg-black/40 group-hover/cover:backdrop-blur-sm ">
+                <div className="group-hover/cover:visible  h-full flex flex-col justify-between invisible transition p-5">
                   <div className="flex flex-col gap-y-5">
                     <div className="">
                       <img
@@ -112,16 +98,19 @@ function RecentlyAdded() {
                   </Link>
                 </div>
               </div>{" "}
+              {isLoading ? (
+                <div className="h-[337.5px] absolute z-30 shrink-0 w-[600px] bg-accent animate-pulse  rounded-md"></div>
+              ) : null}
               <div
                 id={hashblur}
                 className="absolute z-20 top-0 left-0 bg-black"
               >
-                <Blurhash hash={hashblur} width={600} height={377.5} />
+                <Blurhash hash={hashblur} width={600} height={337.5} />
               </div>
               <div>
                 <img
                   width={600}
-                  className="h-fit "
+                  className="h-fit min-h-[337.5px] "
                   src={`${localStorage.getItem("address")}/Items/${
                     media.SeriesId ?? media.Id
                   }/Images/Backdrop`}
