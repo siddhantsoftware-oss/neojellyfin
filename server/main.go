@@ -1,6 +1,8 @@
 package main
 
 import (
+	cfg "server/api/config"
+	"server/api/user"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -18,9 +20,10 @@ func main() {
 		MaxAge:           12 * time.Hour,
 	}))
 
-	router.GET("/config", getConfig)
-	router.POST("/config/server", addServerAddress)
-	router.POST("/config/user", logUserIn)
-	router.GET("/config/address", getServerAddress)
+	router.GET("/config", cfg.GetConfig)
+	router.POST("/config/server", cfg.AddServerAddress)
+	router.POST("/config/user", cfg.LogUserIn)
+	router.GET("/config/address", cfg.GetServerAddress)
+	router.GET("/user", user.GetUserId)
 	router.Run(":3000")
 }

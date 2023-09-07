@@ -1,4 +1,4 @@
-package main
+package config
 
 import (
 	"bytes"
@@ -26,7 +26,7 @@ type ServerInfo struct {
 	StartupWizardComplete bool
 }
 
-func getConfig(c *gin.Context) {
+func GetConfig(c *gin.Context) {
 	address, err := c.Cookie("address")
 	if err != nil {
 		res := Config{
@@ -105,7 +105,7 @@ type BodyRequest struct {
 	ServerAddress string `json:"ServerAddress"`
 }
 
-func addServerAddress(c *gin.Context) {
+func AddServerAddress(c *gin.Context) {
 	var serverAddress BodyRequest
 	c.BindJSON(&serverAddress)
 	res, err := http.Get(serverAddress.ServerAddress + "/System/Info/Public")
@@ -130,10 +130,10 @@ type UserInfo struct {
 	Pw       string `json:"Pw"`
 }
 
-func logUserIn(c *gin.Context) {
+func LogUserIn(c *gin.Context) {
 	var userInfo UserInfo
 	c.BindJSON(&userInfo)
-	res, err := makeRequestToJellyfin("POST", "/Users/AuthenticateByName", userInfo, c)
+	res, err := MakeRequestToJellyfin("POST", "/Users/AuthenticateByName", userInfo, c)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, Config{Message: "There was an error with the Jellyfin server"})
 		panic(err)
@@ -145,11 +145,13 @@ func logUserIn(c *gin.Context) {
 			Id string
 		}
 		type Data struct {
-			User User
+			User        User
+			AccessToken string
 		}
 		var data Data
 		json.NewDecoder(res.Body).Decode(&data)
 		c.SetCookie("userId", data.User.Id, int(time.Second)*604800, "/", "localhost", false, true)
+		c.SetCookie("AccessToken", data.AccessToken, time.Now().Second()*300, "/", "localhost", false, true)
 
 	}
 	c.JSON(res.StatusCode, res.Body)
@@ -160,7 +162,7 @@ type Response struct {
 	Body any
 }
 
-func makeRequestToJellyfin(method string, request string, body any, c *gin.Context) (*http.Response, error) {
+func MakeRequestToJellyfin(method string, request string, body any, c *gin.Context) (*http.Response, error) {
 	address, _ := c.Cookie("address")
 	marshalled, _ := json.Marshal(body)
 	req, _ := http.NewRequest("POST", address+request, bytes.NewReader(marshalled))
@@ -182,7 +184,7 @@ func makeRequestToJellyfin(method string, request string, body any, c *gin.Conte
 	return res, err
 }
 
-func getServerAddress(c *gin.Context) {
+func GetServerAddress(c *gin.Context) {
 	address, err := c.Cookie("address")
 	type Res struct {
 		Message string `json:"message"`
