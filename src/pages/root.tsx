@@ -1,61 +1,37 @@
-import { useQuery } from "react-query";
-import { apiServerUrl } from "../_main";
-import Loading from "../components/Loading";
 import SetupWizard from "./SetupWizard";
 import AppRouter from "../router";
-import useStore from "../helpers/store";
+import { getDeviceId, logUserIn } from "../sdk/server";
+import { useQuery, useQueryClient } from "react-query";
+import Loading from "../components/Loading";
+
+
+export const getAuth = (accessToken?: string) =>
+  `MediaBrowser Client="NeoJellyfin", Device="Chrome", DeviceId="${getDeviceId()}", Version="0.3.1", Token="${accessToken}"`;
 
 function Root() {
-  const [setUserId, setDeviceId] = useStore((state) => [
-    state.setUserId,
-    state.setDeviceId,
-  ]);
 
-  useQuery("userId", () =>
-    fetch(`${apiServerUrl}/user`, {
-      credentials: "include",
-    }).then((res) =>
-      res.json().then((result) => {
-        if (res.ok) {
-          setUserId(result.data);
-        }
-      })
-    )
-  );
-  useQuery("deviceId", () =>
-    fetch(`${apiServerUrl}/config/deviceId`, {
-      credentials: "include",
-    }).then((res) =>
-      res.text().then((result) => {
-        if (res.ok) {
-          setDeviceId(result);
-        }
-      })
-    )
-  );
+  const query = useQueryClient()
 
-  const { data: config, isLoading } = useQuery(
-    "config",
-    async () =>
-      fetch(`${apiServerUrl}/config`, {
-        headers: { Accept: "application/json" },
-        credentials: "include",
-      }),
+  const { isLoading, isError } = useQuery(
+    "userId",
+    () =>
+      logUserIn(
+        localStorage.getItem("username") ?? "",
+        localStorage.getItem("password") ?? "",
+        localStorage.getItem("address") ?? "",
+        query
+      ),
     {
       retry: false,
     }
   );
 
-  if (config && !config.ok) {
-    return <SetupWizard />;
+  if (isLoading) {
+    return <Loading />;
   }
 
-  if (isLoading) {
-    return (
-      <div>
-        <Loading />
-      </div>
-    );
+  if (isError) {
+    return <SetupWizard />;
   }
 
   return <AppRouter />;

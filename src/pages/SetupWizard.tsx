@@ -1,25 +1,15 @@
 import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { apiServerUrl } from "../_main";
+import { useMutation, useQueryClient } from "react-query";
 import { LoadingSpinner } from "../components/Loading";
+import { addServerAddress, logUserIn } from "../sdk/server";
+import isUrl from "is-url-http";
 
 function SetupWizard() {
-  const updateAddress = useMutation({
-    mutationFn: async (newAddress: string) =>
-      fetch(`${apiServerUrl}/config/server`, {
-        method: "POST",
-        body: JSON.stringify({
-          ServerAddress: newAddress,
-        }),
-        credentials: "include",
-      }).then((res) => {
-        if (!res.ok) {
-          throw Error("Could not find server");
-        }
-      }),
-  });
+  const query = useQueryClient();
 
-  const client = useQueryClient()
+  const updateAddress = useMutation({
+    mutationFn: async (newAddress: string) => addServerAddress(newAddress),
+  });
 
   const logInMutation = useMutation({
     mutationFn: async ({
@@ -29,33 +19,17 @@ function SetupWizard() {
       username: string;
       password: string;
     }) =>
-      fetch(`${apiServerUrl}/config/user`, {
-        method: "POST",
-        body: JSON.stringify({
-          Username: username,
-          Pw: password,
-        }),
-        credentials: "include",
-      }),
-      onSuccess: ()=> client.invalidateQueries("config")
+      logUserIn(
+        username,
+        password,
+        localStorage.getItem("address") ?? "",
+        query
+      ),
+    onSuccess: () => {
+      console.log("worked");
+    },
+    onError: () => console.log("not worked"),
   });
-
-  const { isError: addressNotAvailable } = useQuery(
-    "serverAddress",
-    () =>
-      fetch(`${apiServerUrl}/config/address`, {
-        credentials: "include",
-      }).then((res) => {
-        if (!res.ok) {
-          throw Error("Could not server address");
-        } else {
-          return res.json();
-        }
-      }),
-    {
-      retry: false,
-    }
-  );
 
   const [newAddress, setNewAddress] = useState("");
   const [newUsername, setUsername] = useState("");
@@ -67,7 +41,8 @@ function SetupWizard() {
         <div className="text-2xl font-semibold">Login</div>
         <div>
           {" "}
-          {updateAddress.isSuccess || !addressNotAvailable ? (
+          {updateAddress.isSuccess ||
+          isUrl(localStorage.getItem("address") ?? "") ? (
             <form
               onSubmit={(e) => {
                 e.preventDefault();
