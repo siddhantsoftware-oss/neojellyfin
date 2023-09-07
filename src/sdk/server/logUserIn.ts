@@ -26,6 +26,7 @@ async function logUserIn(
   localStorage.setItem("userId", data.User.Id);
   localStorage.setItem("username", username);
   localStorage.setItem("password", password);
+  localStorage.setItem("sessionId", data.SessionInfo.Id);
   queryClient.invalidateQueries("userId");
   return data;
 }

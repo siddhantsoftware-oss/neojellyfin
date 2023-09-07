@@ -1,12 +1,12 @@
 import { useQuery } from "react-query";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { getAuth } from "../../root";
 import Loading from "../../../components/Loading";
 
 interface Movie {
   Name: string;
   OriginalTitle: string;
-  isHD: boolean;
+  IsHD: boolean;
   Genres: string[];
   OfficialRating: string;
   ProductionYear: number;
@@ -85,9 +85,42 @@ function MoviePage() {
               className="rounded-md aspect-[2/3] min-w-[240px]"
             />
           </div>
-          <div className="text-2xl font-semibold">{movie.ProductionYear}</div>
+          <div className="flex flex-col gap-y-6">
+            <div className="flex gap-x-5 items-end">
+              <div className="text-2xl font-semibold">
+                {movie.ProductionYear}
+              </div>
+              <div className="font-semibold">{movie.OfficialRating}</div>
+              {movie.IsHD ? (
+                <div className="bg-white text-black px-2 rounded-md font-bold py-0.5">
+                  HD
+                </div>
+              ) : null}
+            </div>
+            <div>
+              <Link
+                to={`/playback/${movieId}`}
+                className="bg-white transition hover:opacity-70 flex items-center gap-x-2 px-2 py-1 rounded-md text-lg font-semibold text-black w-fit"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                Resume
+              </Link>
+            </div>
+          </div>
         </div>
         <div className="text-4xl font-semibold">{movie.Name}</div>
+        <div></div>
       </div>
     </div>
   );
