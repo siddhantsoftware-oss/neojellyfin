@@ -25,5 +25,6 @@ func main() {
 	router.POST("/config/user", cfg.LogUserIn)
 	router.GET("/config/address", cfg.GetServerAddress)
 	router.GET("/user", user.GetUserId)
+	router.GET("/config/deviceId", cfg.GetDeviceId)
 	router.Run(":3000")
 }
