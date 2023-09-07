@@ -26,7 +26,7 @@ interface MediaType {
 }
 
 function RecentlyAdded() {
-  const { data } = useQuery("recently-added", () =>
+  const { data, isLoading } = useQuery("recently-added", () =>
     fetch(
       `${localStorage.getItem("address")}/Users/${localStorage.getItem(
         "userId"
@@ -40,6 +40,20 @@ function RecentlyAdded() {
       .then((res) => res.json())
       .then((result) => result as MediaType[])
   );
+
+  if (isLoading) {
+    return (
+      <div className="flex overflow-hidden my-10 gap-x-4 p-5">
+        <div className="h-[377.5px] shrink-0 w-[600px] bg-accent animate-pulse  rounded-md"></div>
+        <div className="h-[377.5px] shrink-0 w-[600px] bg-accent animate-pulse  rounded-md"></div>
+        <div className="h-[377.5px] shrink-0 w-[600px] bg-accent animate-pulse  rounded-md"></div>
+        <div className="h-[377.5px] shrink-0 w-[600px] bg-accent animate-pulse  rounded-md"></div>
+        <div className="h-[377.5px] shrink-0 w-[600px] bg-accent animate-pulse  rounded-md"></div>
+        <div className="h-[377.5px] shrink-0 w-[600px] bg-accent animate-pulse  rounded-md"></div>
+        <div className="h-[377.5px] shrink-0 w-[600px] bg-accent animate-pulse  rounded-md"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex py-10 flex-col gap-y-3">
