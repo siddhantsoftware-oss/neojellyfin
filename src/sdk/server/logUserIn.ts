@@ -18,7 +18,6 @@ async function logUserIn(
       Pw: password,
     }),
   });
-  console.log(res.status);
   if (!res.ok) {
     throw Error("Username and password is incorrect");
   }

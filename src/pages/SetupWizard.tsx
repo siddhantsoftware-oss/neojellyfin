@@ -25,10 +25,6 @@ function SetupWizard() {
         localStorage.getItem("address") ?? "",
         query
       ),
-    onSuccess: () => {
-      console.log("worked");
-    },
-    onError: () => console.log("not worked"),
   });
 
   const [newAddress, setNewAddress] = useState("");
