@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import SetupWizard from "./SetupWizard";
 import AppRouter from "../router";
 import { getDeviceId, logUserIn } from "../sdk/server";
