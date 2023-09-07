@@ -3,8 +3,23 @@ import { apiServerUrl } from "../_main";
 import Loading from "../components/Loading";
 import SetupWizard from "./SetupWizard";
 import AppRouter from "../router";
+import useStore from "../helpers/store";
 
 function Root() {
+  const [setUserId] = useStore((state) => [state.setUserId]);
+
+  useQuery("userId", () =>
+    fetch(`${apiServerUrl}/user`, {
+      credentials: "include",
+    }).then((res) =>
+      res.json().then((result) => {
+        if (res.ok) {
+          setUserId(result.data);
+        }
+      })
+    )
+  );
+
   const { data: config, isLoading } = useQuery(
     "config",
     async () =>
