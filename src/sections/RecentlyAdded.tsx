@@ -106,7 +106,7 @@ function RecentlyAdded() {
                     to={`/collection/${media.Type.toLowerCase()}/${
                       media.SeriesId ?? media.Id
                     }`}
-                    className="bg-primary hover:bg-blue-600 px-3 w-fit py-1 text-lg font-semibold rounded-md transition"
+                    className="bg-white hover:bg-gray-300 hover:text-black/80 px-3 w-fit py-1 text-black text-lg font-semibold rounded-md transition"
                   >
                     View
                   </Link>
