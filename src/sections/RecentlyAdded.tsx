@@ -8,6 +8,8 @@ interface MediaType {
   Id: string;
   PlaylistItemId: string;
   SortName: "string";
+  SeriesId: string;
+  SeriesName: string;
 }
 
 function RecentlyAdded() {
@@ -34,13 +36,13 @@ function RecentlyAdded() {
             key={idx}
             className="shrink-0 group/cover relative transition overflow-clip mx-2 rounded-md"
           >
-            <div ></div>
+            <div></div>
             <div className="absolute top-0 left-0 h-full w-full transition group-hover/cover:bg-black/40 group-hover/cover:backdrop-blur-sm "></div>
             <img
               width={600}
               className="h-fit "
               src={`${localStorage.getItem("address")}/Items/${
-                media.Id
+                media.SeriesId ?? media.Id
               }/Images/Backdrop`}
             />
           </div>
