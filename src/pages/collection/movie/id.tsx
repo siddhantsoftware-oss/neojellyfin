@@ -35,7 +35,7 @@ interface Movie {
 function MoviePage() {
   const movieId = useLocation().pathname.replace("/collection/movie/", "");
 
-  const { data: movie, isLoading } = useQuery("movieData", () =>
+  const { data: movie, isLoading } = useQuery(`${movieId}-data`, () =>
     fetch(
       `${localStorage.getItem("address")}/Users/${localStorage.getItem(
         "userId"
