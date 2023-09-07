@@ -1,9 +1,8 @@
 import useStore from "../helpers/store";
 
 function IndexPage() {
-  const [userId] = useStore((state) => [state.userId]);
 
-  return <div>IndexPage: {userId}</div>;
+  return <div>IndexPage</div>;
 }
 
 export default IndexPage;

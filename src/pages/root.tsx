@@ -6,7 +6,10 @@ import AppRouter from "../router";
 import useStore from "../helpers/store";
 
 function Root() {
-  const [setUserId] = useStore((state) => [state.setUserId]);
+  const [setUserId, setDeviceId] = useStore((state) => [
+    state.setUserId,
+    state.setDeviceId,
+  ]);
 
   useQuery("userId", () =>
     fetch(`${apiServerUrl}/user`, {
@@ -15,6 +18,17 @@ function Root() {
       res.json().then((result) => {
         if (res.ok) {
           setUserId(result.data);
+        }
+      })
+    )
+  );
+  useQuery("deviceId", () =>
+    fetch(`${apiServerUrl}/config/deviceId`, {
+      credentials: "include",
+    }).then((res) =>
+      res.text().then((result) => {
+        if (res.ok) {
+          setDeviceId(result);
         }
       })
     )
