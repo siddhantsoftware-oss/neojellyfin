@@ -1,4 +1,3 @@
-import useStore from "../helpers/store";
 
 function IndexPage() {
 
