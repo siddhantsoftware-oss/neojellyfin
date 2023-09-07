@@ -1,7 +1,11 @@
+import RecentlyAdded from "../sections/RecentlyAdded";
 
 function IndexPage() {
-
-  return <div>IndexPage</div>;
+  return (
+    <div>
+      <RecentlyAdded />
+    </div>
+  );
 }
 
 export default IndexPage;
