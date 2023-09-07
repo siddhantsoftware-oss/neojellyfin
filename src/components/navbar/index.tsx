@@ -1,6 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function Nav() {
+  const pathname = useLocation().pathname;
+
+  if (pathname.includes("playback")) {
+    return null;
+  }
+
   return (
     <div className="flex px-10 py-5">
       <Link
