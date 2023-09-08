@@ -56,6 +56,8 @@ function MoviePage() {
       .then((result) => result as Media)
   );
 
+      
+
   if (isLoading) {
     return <Loading />;
   }
