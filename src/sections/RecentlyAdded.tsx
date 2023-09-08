@@ -4,7 +4,7 @@ import Marquee from "react-fast-marquee";
 import { Link } from "react-router-dom";
 import { Blurhash } from "react-blurhash";
 
-interface MediaType {
+export interface MediaType {
   Name: string;
   OriginalTitle: string;
   Id: string;

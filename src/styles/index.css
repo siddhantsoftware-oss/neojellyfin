@@ -4,6 +4,15 @@
 
 :root {
   scrollbar-gutter: stable;
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+  @apply bg-secondary/30 rounded-sm;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-primary rounded-sm;
 }
 
 body {
