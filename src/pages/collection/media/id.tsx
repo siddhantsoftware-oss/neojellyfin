@@ -7,7 +7,7 @@ import AllSeasons from "../../../sections/media/AllSeasons";
 import AllEpisodes from "../../../sections/media/AllEpisodes";
 
 export interface Media {
-  ParentId: string
+  ParentId: string;
   Id: string;
   Name: string;
   OriginalTitle: string;
@@ -66,7 +66,7 @@ function MoviePage() {
 
   return (
     <div className=" relative">
-      <div className="h-[200px]">
+      <div id={media.Id + "_backdrop"} className="h-[200px]">
         <div className="relative">
           <Image
             Ratio={16 / 9}
@@ -75,6 +75,10 @@ function MoviePage() {
             )}/Items/${mediaId}/Images/Backdrop`}
             className="w-full overflow-hidden h-[400px] object-cover opacity-70 "
             alt=""
+            onError={() => {
+              const element = document.getElementById(mediaId + "_backdrop");
+              element?.parentNode?.removeChild(element);
+            }}
           />
           <div className="absolute bg-gradient-to-t from-background to-transparent bottom-0 left-0 w-full h-[20%]  "></div>
           <div className="absolute bg-gradient-to-b from-background to-transparent top-0 left-0 w-full h-[20%]  "></div>

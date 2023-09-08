@@ -51,7 +51,7 @@ function AllShowsList() {
 
   return (
     <div className="px-10 flex flex-col gap-y-5">
-      <div className="text-4xl font-semibold">{collection.Name}</div>
+      <div className="text-5xl  pb-8 pt-5 font-semibold ">{collection.Name}</div>
       <div className="flex flex-wrap gap-5">
         {items.map((item, key) => (
           <VerticalCover key={key} media={item} />
@@ -73,7 +73,7 @@ export const VerticalCover = ({ media }: { media: MediaType }) => {
         src={`${localStorage.getItem("address")}/Items/${
           media.SeriesId ?? media.Id
         }/Images/Primary`}
-        width={140}
+        width={180}
         className="rounded-md overflow-clip"
       />
     </Link>

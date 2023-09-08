@@ -40,10 +40,17 @@ function Image(props: ImageProps) {
             props.onLoad(event);
           }
         }}
-        onError={() => setHasFailed(true)}
+        onError={(event) => {
+          setHasFailed(true);
+          if (props.onError) {
+            props.onError(event);
+          }
+        }}
       />
       {!hasLoadedYet || hasFailed ? (
-        <div className={`w-full ${props.className} flex place-items-center justify-center h-full absolute top-0 left-0 z-20 bg-accent`}>
+        <div
+          className={`w-full ${props.className} flex place-items-center justify-center h-full absolute top-0 left-0 z-20 bg-accent`}
+        >
           {hasFailed ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
