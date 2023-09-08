@@ -3,7 +3,6 @@ import { getAuth } from "../pages/root";
 import { MediaType } from "./RecentlyAdded";
 import { Link } from "react-router-dom";
 import Image from "../components/Image";
-import { useState } from "react";
 
 interface ResumeMedia extends MediaType {
   UserData: {
