@@ -4,9 +4,11 @@ import { getAuth } from "../../root";
 import Loading from "../../../components/Loading";
 import Image from "../../../components/Image";
 import AllSeasons from "../../../sections/media/AllSeasons";
+import AllEpisodes from "../../../sections/media/AllEpisodes";
 
 export interface Media {
-  Id: string
+  ParentId: string
+  Id: string;
   Name: string;
   OriginalTitle: string;
   IsHD: boolean;
@@ -67,7 +69,7 @@ function MoviePage() {
       <div className="h-[200px]">
         <div className="relative">
           <Image
-          Ratio={16/9}
+            Ratio={16 / 9}
             src={`${localStorage.getItem(
               "address"
             )}/Items/${mediaId}/Images/Backdrop`}
@@ -82,7 +84,7 @@ function MoviePage() {
         <div className="flex items-end gap-x-5">
           <div className="drop-shadow-2xl">
             <Image
-            Ratio={2/3}
+              Ratio={2 / 3}
               src={`${localStorage.getItem(
                 "address"
               )}/Items/${mediaId}/Images/Primary`}
@@ -130,11 +132,8 @@ function MoviePage() {
             ) : null}
           </div>
         </div>
-                  {
-                    media.Type === 'Series' ? (
-                      <AllSeasons media={media} />
-                    ) : null
-                  }
+        {media.Type === "Series" ? <AllSeasons media={media} /> : null}
+        {media.Type === "Season" ? <AllEpisodes media={media} /> : null}
         <div className="">
           <div className="text-3xl font-semibold">Cast</div>
           <div className="flex gap-x-4  pb-10 pt-4 overflow-x-scroll ">
@@ -154,7 +153,7 @@ function MoviePage() {
                   <div className="flex flex-col items-center max-w-[150px] gap-y-2 ">
                     <div className="relative w-[150px] aspect-square">
                       <Image
-                      Ratio={1}
+                        Ratio={1}
                         id={people.Id + "_img"}
                         width={150}
                         src={`${localStorage.getItem("address")}/Items/${
