@@ -2,11 +2,12 @@ import { useQuery } from "react-query";
 import { Link, useLocation } from "react-router-dom";
 import { getAuth } from "../../root";
 import { MediaType } from "../../../sections/RecentlyAdded";
+import Image from "../../../components/Image";
 
 interface ItemType {
-    Name: string;
-    Id: string;
-  }
+  Name: string;
+  Id: string;
+}
 
 function AllShowsList() {
   const collectionId = useLocation().pathname.replace(
@@ -66,13 +67,14 @@ export const VerticalCover = ({ media }: { media: MediaType }) => {
       to={`/collection/media/${media.Id}`}
       className="hover:scale-105 hover:opacity-80 transition"
     >
-      <img
+      <Image
+        Ratio={2/3}
         alt={media.Name}
         src={`${localStorage.getItem("address")}/Items/${
           media.SeriesId ?? media.Id
         }/Images/Primary`}
         width={140}
-        className="rounded-md"
+        className="rounded-md overflow-clip"
       />
     </Link>
   );
