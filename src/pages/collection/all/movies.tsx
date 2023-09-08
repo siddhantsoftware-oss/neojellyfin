@@ -15,7 +15,7 @@ function ViewMovieLibrary() {
     ""
   );
 
-  const { data: collection } = useQuery(collectionId + "_all", () =>
+  const { data: collection } = useQuery(collectionId + "_all", () => 
     fetch(
       `${localStorage.getItem("address")}/Users/${localStorage.getItem(
         "userId"
