@@ -51,26 +51,38 @@ function MediaPlayback() {
             PlayMethod: "Transcode",
             PlaySessionId: result.PlaySessionId,
             AudioStreamIndex: 1,
+            StartPlayBackTicks: resumeTicks,
           }),
-        }).then(()=>fetch(`${localStorage.getItem("address")}/Sessions/Playing/Progress`, {
-          method: "POST",
-          headers: {
-            Authorization: getAuth(localStorage.getItem("AccessToken") ?? ""),
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            AudioStreamIndex: 1,
-            CanSeek: true,
-            Is
-          })
-        })),
+        }).then(() =>
+          fetch(
+            `${localStorage.getItem("address")}/Sessions/Playing/Progress`,
+            {
+              method: "POST",
+              headers: {
+                Authorization: getAuth(
+                  localStorage.getItem("AccessToken") ?? ""
+                ),
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                AudioStreamIndex: 1,
+                CanSeek: true,
+                IsPaused: false,
+                isMuted: false,
+                EventName: "timeupdate",
+                PlayMethod: "Transcode",
+                PlaySessionId: result.PlaySessionId,
+                StartPlayBackTicks: resumeTicks,
+              }),
+            }
+          )
+        ),
     }
   );
 
   if (!mediaUrl) {
     return <Loading />;
   }
-
 
   return (
     <div className=" h-screen flex place-items-center max-h-screen justify-center">
@@ -79,7 +91,6 @@ function MediaPlayback() {
           mediaUrl.MediaSources[0].TranscodingUrl
         }`}
         playerRef={playerRef}
-        
         autoPlay
         className="w-full max-h-screen outline-none "
       />

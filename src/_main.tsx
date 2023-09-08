@@ -5,7 +5,9 @@ import "./styles/index.css";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Index from "./pages/root";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { refetchOnWindowFocus: false } },
+});
 
 export const apiServerUrl = "http://localhost:3000";
 
