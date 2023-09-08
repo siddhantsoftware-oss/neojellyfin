@@ -114,7 +114,7 @@ function MoviePage() {
                     clipRule="evenodd"
                   />
                 </svg>
-                Resume
+                {movie.UserData.PlaybackPositionTicks!==0?"Resume":"Play"}
               </Link>
             </div>
           </div>
