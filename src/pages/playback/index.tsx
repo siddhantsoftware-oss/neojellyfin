@@ -4,6 +4,7 @@ import { DeviceProfile } from "../../sdk/server/deviceProfile";
 import { useQuery } from "react-query";
 import ReactHlsPlayer from "react-hls-player";
 import { useRef } from "react";
+import Loading from "../../components/Loading";
 
 function MediaPlayback() {
   const mediaId = useLocation().pathname.replace("/playback/", "");
@@ -30,43 +31,57 @@ function MediaPlayback() {
             DeviceProfile: DeviceProfile,
           }),
         }
-      ).then((res) =>
-        res.json().then((result) =>
-          fetch(`${localStorage.getItem("address")}/Sessions/Playing`, {
-            method: "POST",
-            headers: {
-              Authorization: getAuth(localStorage.getItem("AccessToken") ?? ""),
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              MediaSourceId: mediaId,
-              ItemId: mediaId,
-              PositionTicks: resumeTicks,
-              PlaySessionId: result.PlaySessionId,
-              PlayMethod: "Transcode",
-              isPaused: false,
-              isMuted: false,
-              CanSeek: true,
-              PlaybackRate: 1,
-              RepeatMode: "RepeatNone"
-            }),
-          }).then(() => result.MediaSources[0].TranscodingUrl as string)
-        )
-      ),
+      ).then((res) => res.json()),
     {
       retry: false,
       refetchOnWindowFocus: false,
+      onSuccess: (result) =>
+        fetch(`${localStorage.getItem("address")}/Sessions/Playing`, {
+          method: "POST",
+          headers: {
+            Authorization: getAuth(localStorage.getItem("AccessToken") ?? ""),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            IsPaused: false,
+            ItemId: mediaId,
+            IsMuted: false,
+            MediaSourceId: mediaId,
+            CanSeek: true,
+            PlayMethod: "Transcode",
+            PlaySessionId: result.PlaySessionId,
+            AudioStreamIndex: 1,
+          }),
+        }).then(()=>fetch(`${localStorage.getItem("address")}/Sessions/Playing/Progress`, {
+          method: "POST",
+          headers: {
+            Authorization: getAuth(localStorage.getItem("AccessToken") ?? ""),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            AudioStreamIndex: 1,
+            CanSeek: true,
+            Is
+          })
+        })),
     }
   );
+
+  if (!mediaUrl) {
+    return <Loading />;
+  }
+
 
   return (
     <div className=" h-screen flex place-items-center max-h-screen justify-center">
       <ReactHlsPlayer
-        src={`${localStorage.getItem("address")}${mediaUrl}`}
+        src={`${localStorage.getItem("address")}${
+          mediaUrl.MediaSources[0].TranscodingUrl
+        }`}
         playerRef={playerRef}
-        className="w-full max-h-screen outline-none "
+        
         autoPlay
-        controls
+        className="w-full max-h-screen outline-none "
       />
     </div>
   );
