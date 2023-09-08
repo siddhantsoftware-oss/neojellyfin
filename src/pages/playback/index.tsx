@@ -20,7 +20,9 @@ function MediaPlayback() {
           "address"
         )}/Items/${mediaId}/PlayBackInfo?UserId=${localStorage.getItem(
           "userId"
-        )}&StartTimeTicks=${resumeTicks}&IsPlayback=true&AutoOpenLiveStream=true`,
+        )}&StartTimeTicks=${Number(
+          resumeTicks
+        )}&IsPlayback=true&AutoOpenLiveStream=true`,
         {
           method: "POST",
           headers: {
@@ -51,7 +53,8 @@ function MediaPlayback() {
             PlayMethod: "Transcode",
             PlaySessionId: result.PlaySessionId,
             AudioStreamIndex: 1,
-            StartPlayBackTicks: resumeTicks,
+            PositionTicks: isNaN(Number(resumeTicks)) ? 0 : Number(resumeTicks),
+            RepeatMode: "RepeatNone",
           }),
         }).then(() =>
           fetch(
@@ -72,7 +75,8 @@ function MediaPlayback() {
                 EventName: "timeupdate",
                 PlayMethod: "Transcode",
                 PlaySessionId: result.PlaySessionId,
-                StartPlayBackTicks: resumeTicks,
+                PositionTicks: isNaN(Number(resumeTicks)) ? 0 : Number(resumeTicks),
+                RepeatMode: "RepeatNone",
               }),
             }
           )
@@ -88,7 +92,7 @@ function MediaPlayback() {
     <div className=" h-screen flex place-items-center max-h-screen justify-center">
       <ReactHlsPlayer
         src={`${localStorage.getItem("address")}${
-          mediaUrl.MediaSources[0].TranscodingUrl
+          mediaUrl.MediaSources[0].TranscodingUrl+""
         }`}
         playerRef={playerRef}
         autoPlay
