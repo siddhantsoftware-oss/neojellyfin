@@ -28,12 +28,22 @@ function Image(props: ImageProps) {
         alt={props.alt}
         width={props.width}
         height={props.height}
-        className={`${hasLoadedYet || !hasFailed ? "visible" : "invisible"}`}
-        onLoad={() => setHasLoadedYet(true)}
+        style={{
+          aspectRatio: props.Ratio,
+        }}
+        className={`${
+          hasLoadedYet || !hasFailed ? "visible" : "invisible"
+        } object-cover ${props.className}`}
+        onLoad={(event) => {
+          setHasLoadedYet(true);
+          if (props.onLoad) {
+            props.onLoad(event);
+          }
+        }}
         onError={() => setHasFailed(true)}
       />
       {!hasLoadedYet || hasFailed ? (
-        <div className="w-full flex place-items-center justify-center h-full absolute top-0 left-0 z-20 bg-accent">
+        <div className={`w-full ${props.className} flex place-items-center justify-center h-full absolute top-0 left-0 z-20 bg-accent`}>
           {hasFailed ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"

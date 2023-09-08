@@ -2,6 +2,7 @@ import { useQuery } from "react-query";
 import { getAuth } from "../pages/root";
 import { MediaType } from "./RecentlyAdded";
 import { Link } from "react-router-dom";
+import Image from "../components/Image";
 
 interface ResumeMedia extends MediaType {
   UserData: {
@@ -34,12 +35,13 @@ function ResumeWatching() {
         {data?.map((media, key) => (
           <div className="shrink-0 group/cover" key={key}>
             <div className="relative aspect-[16/9] min-w-[400px]">
-              <img
+              <Image
+                Ratio={16 / 9}
                 src={`${localStorage.getItem("address")}/Items/${
                   media.Id
                 }/Images/Backdrop`}
                 alt=""
-                className="w-[400px] rounded-md aspect-[16/9]"
+                className="w-[400px] rounded-md overflow-clip aspect-[16/9]"
               />
               <div
                 style={{

@@ -2,6 +2,7 @@ import { useQuery } from "react-query";
 import { Link, useLocation } from "react-router-dom";
 import { getAuth } from "../../root";
 import Loading from "../../../components/Loading";
+import Image from "../../../components/Image";
 
 interface Movie {
   Name: string;
@@ -63,7 +64,8 @@ function MoviePage() {
     <div className=" relative">
       <div className="h-[200px]">
         <div className="relative">
-          <img
+          <Image
+          Ratio={16/9}
             src={`${localStorage.getItem(
               "address"
             )}/Items/${mediaId}/Images/Backdrop`}
@@ -77,7 +79,8 @@ function MoviePage() {
       <div className="relative flex-col flex gap-y-5 z-20 px-10">
         <div className="flex items-end gap-x-5">
           <div className="drop-shadow-2xl">
-            <img
+            <Image
+            Ratio={2/3}
               src={`${localStorage.getItem(
                 "address"
               )}/Items/${mediaId}/Images/Primary`}
@@ -144,7 +147,8 @@ function MoviePage() {
                 >
                   <div className="flex flex-col items-center max-w-[150px] gap-y-2 ">
                     <div className="relative w-[150px] aspect-square">
-                      <img
+                      <Image
+                      Ratio={1}
                         id={people.Id + "_img"}
                         width={150}
                         src={`${localStorage.getItem("address")}/Items/${
@@ -156,7 +160,7 @@ function MoviePage() {
                           );
                           element?.parentNode?.removeChild(element);
                         }}
-                        className="rounded-full bg-white aspect-square absolute top-0 left-0 z-20 object-cover"
+                        className="rounded-full aspect-square absolute top-0 left-0 z-20 object-cover"
                       />
                       <div className="absolute top-0 left-0 bg-accent   h-full rounded-full aspect-square"></div>
                     </div>
