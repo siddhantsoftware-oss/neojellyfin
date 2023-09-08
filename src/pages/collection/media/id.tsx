@@ -3,8 +3,10 @@ import { Link, useLocation } from "react-router-dom";
 import { getAuth } from "../../root";
 import Loading from "../../../components/Loading";
 import Image from "../../../components/Image";
+import AllSeasons from "../../../sections/media/AllSeasons";
 
-interface Movie {
+export interface Media {
+  Id: string
   Name: string;
   OriginalTitle: string;
   IsHD: boolean;
@@ -49,7 +51,7 @@ function MoviePage() {
       }
     )
       .then((res) => res.json())
-      .then((result) => result as Movie)
+      .then((result) => result as Media)
   );
 
   if (isLoading) {
@@ -128,7 +130,11 @@ function MoviePage() {
             ) : null}
           </div>
         </div>
-
+                  {
+                    media.Type === 'Series' ? (
+                      <AllSeasons media={media} />
+                    ) : null
+                  }
         <div className="">
           <div className="text-3xl font-semibold">Cast</div>
           <div className="flex gap-x-4  pb-10 pt-4 overflow-x-scroll ">
