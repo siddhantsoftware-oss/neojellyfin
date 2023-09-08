@@ -5,6 +5,7 @@ import MoviePage from "./pages/collection/movie/id";
 import ViewMovieLibrary from "./pages/collection/all/movies";
 import MediaPlayback from "./pages/playback";
 import SeriesPage from "./pages/collection/series/id";
+import AllShowsList from "./pages/collection/all/shows";
 
 const AppRouter = () => (
   <BrowserRouter>
@@ -15,6 +16,7 @@ const AppRouter = () => (
       <Route path="/collection/series/:id" element={<SeriesPage />} />
       <Route path="/collection/movies/all/:id" element={<ViewMovieLibrary />} />
       <Route path="/playback/:media" element={<MediaPlayback />} />
+      <Route path="/collection/shows/all/:id" element={<AllShowsList />} />
     </Routes>
   </BrowserRouter>
 );
