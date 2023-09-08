@@ -2,7 +2,6 @@ import { useQuery } from "react-query";
 import { useLocation } from "react-router-dom";
 import { getAuth } from "../../root";
 import Loading from "../../../components/Loading";
-import { MediaType } from "../../../sections/RecentlyAdded";
 
 function SeriesPage() {
   const seriesId = useLocation().pathname.replace("/collection/series/", "");
