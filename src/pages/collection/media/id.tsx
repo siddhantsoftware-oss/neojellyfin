@@ -33,13 +33,13 @@ interface Movie {
 }
 
 function MoviePage() {
-  const movieId = useLocation().pathname.replace("/collection/movie/", "");
+  const mediaId = useLocation().pathname.replace("/collection/media/", "");
 
-  const { data: movie, isLoading } = useQuery(`${movieId}-data`, () =>
+  const { data: media, isLoading } = useQuery(`${mediaId}-data`, () =>
     fetch(
       `${localStorage.getItem("address")}/Users/${localStorage.getItem(
         "userId"
-      )}/Items/${movieId}`,
+      )}/Items/${mediaId}`,
       {
         headers: {
           Authorization: getAuth(localStorage.getItem("AccessToken") ?? ""),
@@ -54,7 +54,7 @@ function MoviePage() {
     return <Loading />;
   }
 
-  if (!movie) {
+  if (!media) {
     return <div>Could not find what you requested</div>;
   }
 
@@ -65,7 +65,7 @@ function MoviePage() {
           <img
             src={`${localStorage.getItem(
               "address"
-            )}/Items/${movieId}/Images/Backdrop`}
+            )}/Items/${mediaId}/Images/Backdrop`}
             className="w-full overflow-hidden h-[400px] object-cover opacity-70 "
             alt=""
           />
@@ -79,7 +79,7 @@ function MoviePage() {
             <img
               src={`${localStorage.getItem(
                 "address"
-              )}/Items/${movieId}/Images/Primary`}
+              )}/Items/${mediaId}/Images/Primary`}
               width={240}
               alt=""
               className="rounded-md aspect-[2/3] min-w-[240px]"
@@ -88,10 +88,10 @@ function MoviePage() {
           <div className="flex flex-col gap-y-6">
             <div className="flex gap-x-5 items-end">
               <div className="text-2xl font-semibold">
-                {movie.ProductionYear}
+                {media.ProductionYear}
               </div>
-              <div className="font-semibold">{movie.OfficialRating}</div>
-              {movie.IsHD ? (
+              <div className="font-semibold">{media.OfficialRating}</div>
+              {media.IsHD ? (
                 <div className="bg-white text-black px-2 rounded-md font-bold py-0.5">
                   HD
                 </div>
@@ -99,7 +99,7 @@ function MoviePage() {
             </div>
             <div>
               <Link
-                to={`/playback/${movieId}`}
+                to={`/playback/${mediaId}`}
                 className="bg-white transition hover:opacity-70 flex items-center gap-x-2 px-2 py-1 rounded-md text-lg font-semibold text-black w-fit"
               >
                 <svg
@@ -114,13 +114,54 @@ function MoviePage() {
                     clipRule="evenodd"
                   />
                 </svg>
-                {movie.UserData.PlaybackPositionTicks!==0?"Resume":"Play"}
+                {media.UserData.PlaybackPositionTicks !== 0 ? "Resume" : "Play"}
               </Link>
             </div>
           </div>
         </div>
-        <div className="text-4xl font-semibold">{movie.Name}</div>
-        <div></div>
+        <div className="text-4xl font-semibold">{media.Name}</div>
+        <div className="">
+          <div className="text-3xl font-semibold">Cast</div>
+          <div className="flex gap-x-4  pb-10 pt-4 overflow-x-scroll ">
+            {media.People.map(
+              (
+                people: {
+                  Name: string;
+                  Id: string;
+                  Role: string;
+                },
+                key: number
+              ) => (
+                <div
+                  key={key}
+                  className="flex flex-col items-center justify-between shrink-0 text-center "
+                >
+                  <div className="flex flex-col items-center max-w-[150px] gap-y-2 ">
+                    <div className="relative w-[150px] aspect-square">
+                      <img
+                        id={people.Id + "_img"}
+                        width={150}
+                        src={`${localStorage.getItem("address")}/Items/${
+                          people.Id
+                        }/Images/Primary`}
+                        onError={() => {
+                          const element = document.getElementById(
+                            people.Id + "_img"
+                          );
+                          element?.parentNode?.removeChild(element);
+                        }}
+                        className="rounded-full bg-white aspect-square absolute top-0 left-0 z-20 object-cover"
+                      />
+                      <div className="absolute top-0 left-0 bg-accent   h-full rounded-full aspect-square"></div>
+                    </div>
+                    <div className="font-semibold text-sm">{people.Name}</div>
+                  </div>
+                  <div className="text-xs opacity-80">{people.Role}</div>
+                </div>
+              )
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

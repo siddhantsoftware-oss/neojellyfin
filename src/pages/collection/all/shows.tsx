@@ -4,9 +4,9 @@ import { getAuth } from "../../root";
 import { MediaType } from "../../../sections/RecentlyAdded";
 
 interface ItemType {
-  Name: string;
-  Id: string;
-}
+    Name: string;
+    Id: string;
+  }
 
 function AllShowsList() {
   const collectionId = useLocation().pathname.replace(
@@ -63,7 +63,7 @@ function AllShowsList() {
 export const VerticalCover = ({ media }: { media: MediaType }) => {
   return (
     <Link
-      to={`/collection/series/${media.Id}`}
+      to={`/collection/media/${media.Id}`}
       className="hover:scale-105 hover:opacity-80 transition"
     >
       <img
