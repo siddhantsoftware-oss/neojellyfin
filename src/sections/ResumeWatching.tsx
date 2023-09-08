@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 interface ResumeMedia extends MediaType {
   UserData: {
     PlayedPercentage: number;
+    PlaybackPositionTicks: number;
   };
 }
 
@@ -49,7 +50,12 @@ function ResumeWatching() {
               <div className="absolute h-[5px] z-10 bg-secondary/80 w-full bottom-0 left-0 rounded-bl-md"></div>
               <div className="absolute z-30 invisible group-hover/cover:visible transition top-0 left-0 w-full h-full bg-black/70 backdrop-blur-sm flex place-items-center justify-center">
                 <Link
-                  to={"/playback/" + media.Id}
+                  to={
+                    "/playback/" +
+                    media.Id +
+                    "?resume=" +
+                    media.UserData.PlaybackPositionTicks
+                  }
                   className="rounded-full bg-primary p-3 hover:opacity-80 transition"
                 >
                   <svg
