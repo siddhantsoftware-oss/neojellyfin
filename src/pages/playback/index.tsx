@@ -2,15 +2,19 @@ import { useLocation } from "react-router-dom";
 import { getAuth } from "../root";
 import { DeviceProfile } from "../../sdk/server/deviceProfile";
 import { useQuery } from "react-query";
-import ReactHlsPlayer from "react-hls-player";
 import { useRef } from "react";
 import Loading from "../../components/Loading";
+import ReactPlayer from "react-player";
+
+export function ticksToSeconds(ticks: number) {
+  return ticks / 10000000;
+}
 
 function MediaPlayback() {
   const mediaId = useLocation().pathname.replace("/playback/", "");
   const resumeTicks = useLocation().search.replace("?resume=", "") ?? 0;
 
-  const playerRef = useRef<HTMLVideoElement>(null);
+  const playerRef = useRef<ReactPlayer>(null);
 
   const { data: mediaUrl } = useQuery(
     `${mediaId}-playback`,
@@ -18,9 +22,9 @@ function MediaPlayback() {
       fetch(
         `${localStorage.getItem(
           "address"
-        )}/Items/${mediaId}/PlayBackInfo?UserId=${localStorage.getItem(
+        )}/Items/${mediaId}/PlayBackInfo?userId=${localStorage.getItem(
           "userId"
-        )}&StartTimeTicks=${Number(
+        )}&startTimeTicks=${Number(
           resumeTicks
         )}&IsPlayback=true&AutoOpenLiveStream=true`,
         {
@@ -75,11 +79,18 @@ function MediaPlayback() {
                 EventName: "timeupdate",
                 PlayMethod: "Transcode",
                 PlaySessionId: result.PlaySessionId,
-                PositionTicks: isNaN(Number(resumeTicks)) ? 0 : Number(resumeTicks),
+                PositionTicks: isNaN(Number(resumeTicks))
+                  ? 0
+                  : Number(resumeTicks),
                 RepeatMode: "RepeatNone",
               }),
             }
-          )
+          ).then(() => {
+            playerRef.current?.seekTo(
+              ticksToSeconds(Number(resumeTicks)),
+              "seconds"
+            );
+          })
         ),
     }
   );
@@ -90,13 +101,23 @@ function MediaPlayback() {
 
   return (
     <div className=" h-screen flex place-items-center max-h-screen justify-center">
-      <ReactHlsPlayer
-        src={`${localStorage.getItem("address")}${
-          mediaUrl.MediaSources[0].TranscodingUrl+""
+      <ReactPlayer
+        url={`${localStorage.getItem("address")}${
+          mediaUrl.MediaSources[0].TranscodingUrl + ""
         }`}
-        playerRef={playerRef}
-        autoPlay
-        className="w-full max-h-screen outline-none "
+        playbackRate={1}
+        playing={true}
+        ref={playerRef}
+        width={"100%"}
+        height={'100vh'}
+        style={{
+          backgroundColor: "black",
+        }}
+        config={{
+          file: {
+            forceHLS: true,
+          },
+        }}
       />
     </div>
   );
