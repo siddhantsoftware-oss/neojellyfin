@@ -62,7 +62,7 @@ function SetupWizard() {
                 type="password"
                 placeholder="Password"
                 className="bg-accent px-5 py-2 outline-none w-[300px] rounded-md"
-                required
+ 
                 onChange={(e) => setPassword(e.target.value)}
               />
               <button className="bg-primary py-1.5 uppercase font-semibold hover:opacity-70 transition rounded-md">

@@ -3,6 +3,7 @@ import { getAuth } from "../pages/root";
 import Marquee from "react-fast-marquee";
 import { Link } from "react-router-dom";
 import { Blurhash } from "react-blurhash";
+import { LoadingSpinner } from "../components/Loading";
 
 export interface MediaType {
   Name: string;
@@ -37,7 +38,7 @@ function RecentlyAdded() {
     fetch(
       `${localStorage.getItem("address")}/Users/${localStorage.getItem(
         "userId"
-      )}/Items/Latest`,
+      )}/Items/Latest?Limit=16&EnableImageTypes=Backdrop`,
       {
         headers: {
           Authorization: getAuth(localStorage.getItem("AccessToken") ?? ""),
@@ -48,14 +49,18 @@ function RecentlyAdded() {
       .then((result) => result as MediaType[])
   );
 
+  if(!data){
+    return <LoadingSpinner />
+  }
+
   return (
     <div className="flex my-10 flex-col min-h-[337.5px]  gap-y-3">
       <Marquee speed={40} pauseOnHover>
         {data?.map((media, idx) => {
           const backdropTag =
-            media.BackdropImageTags[0] ?? media.ParentBackdropImageTags[0];
+            media.BackdropImageTags?.length > 0 ? media.BackdropImageTags[0] : media.ParentBackdropImageTags?.length > 0 ? media?.ParentBackdropImageTags[0] : null;
           const hashblur =
-            media.ImageBlurHashes.Backdrop[`${backdropTag}`] ?? "";
+            media.ImageBlurHashes?.Backdrop ? media.ImageBlurHashes.Backdrop[`${backdropTag}`] : "";
 
           return (
             <div
@@ -67,15 +72,15 @@ function RecentlyAdded() {
                   <div className="flex flex-col gap-y-5">
                     <div className="">
                       <img
-                        id={media.SeriesId ?? media.Id}
+                        id={media?.SeriesId ?? media.Id}
                         src={`${localStorage.getItem("address")}/Items/${
-                          media.SeriesId ?? media.Id
+                          media?.SeriesId ?? media.Id
                         }/Images/Logo`}
                         className="w-[200px] h-fit "
-                        alt={"Movie poster for " + media.Name}
+                        alt={"Movie poster for " + media?.Name}
                         onError={() => {
                           const element = document.getElementById(
-                            media.SeriesId ?? media.Id
+                            media?.SeriesId ?? media?.Id
                           );
                           element?.parentNode?.removeChild(element);
                         }}
@@ -83,15 +88,15 @@ function RecentlyAdded() {
                     </div>
                     <div className="flex gap-x-2 flex-wrap">
                       <div className="bg-background px-2 rounded-md font-bold  w-fit">
-                        {media.OfficialRating}
+                        {media?.OfficialRating}
                       </div>
-                      {media.hasSubtitles ? (
+                      {media?.hasSubtitles ? (
                         <div className="bg-background px-2 rounded-md font-bold  w-fit">
                           Subtitles
                         </div>
                       ) : null}
                       <div className="bg-background px-2 rounded-md font-bold  w-fit">
-                        {new Date(media.PremiereDate).getFullYear()}
+                        {new Date(media?.PremiereDate).getFullYear()}
                       </div>
                     </div>
                   </div>
@@ -106,18 +111,20 @@ function RecentlyAdded() {
               {isLoading ? (
                 <div className="h-[337.5px] absolute z-30 shrink-0 w-[600px] bg-accent animate-pulse  rounded-md"></div>
               ) : null}
-              <div
+              {
+                hashblur.length > 0? <div
                 id={hashblur}
                 className="absolute z-20 top-0 left-0 bg-black"
               >
                 <Blurhash hash={hashblur} width={600} height={337.5} />
-              </div>
+              </div>: null
+              }
               <div>
                 <img
                   width={600}
                   className="h-fit min-h-[337.5px] "
                   src={`${localStorage.getItem("address")}/Items/${
-                    media.SeriesId ?? media.Id
+                    media.SeriesId ? media.SeriesId : media.Id
                   }/Images/Backdrop`}
                   onLoad={() => {
                     const element = document.getElementById(hashblur);

@@ -1,3 +1,4 @@
+import NextUpMedia from "../sections/NextUp";
 import RecentlyAdded from "../sections/RecentlyAdded";
 import ResumeWatching from "../sections/ResumeWatching";
 import ViewAllCollections from "../sections/ViewAllCollections";
@@ -9,6 +10,7 @@ function IndexPage() {
       <RecentlyAdded />
       <ViewAllCollections />
       <ResumeWatching />
+      <NextUpMedia />
     </div>
   );
 }
