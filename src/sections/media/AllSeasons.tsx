@@ -3,8 +3,9 @@ import { getAuth } from "../../pages/root";
 import Image from "../../components/Image";
 import { Link } from "react-router-dom";
 import { MediaType } from "../RecentlyAdded";
+import { Media } from "../../pages/collection/media/id";
 
-function AllSeasons({ media }: { media: MediaType }) {
+function AllSeasons({ media }: { media: Media }) {
   const { data: seasons } = useQuery(media.Id, () =>
     fetch(
       `${localStorage.getItem("address")}/Shows/${
