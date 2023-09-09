@@ -56,8 +56,6 @@ function MoviePage() {
       .then((result) => result as Media)
   );
 
-      
-
   if (isLoading) {
     return <Loading />;
   }
@@ -99,43 +97,50 @@ function MoviePage() {
               className="rounded-md aspect-[2/3] min-w-[240px]"
             />
           </div>
-          <div className="flex flex-col gap-y-6">
-            <div className="text-4xl font-semibold">{media.Name}</div>
-            <div className="flex gap-x-5 items-end">
-              <div className="text-2xl font-semibold">
-                {media.ProductionYear}
+          <div className="flex items-start justify-between w-full">
+            <div className="flex flex-col gap-y-6">
+              <div className="text-4xl font-semibold">{media.Name}</div>
+              <div className="flex gap-x-5 items-end">
+                <div className="text-2xl font-semibold">
+                  {media.ProductionYear}
+                </div>
+                <div className="font-semibold">{media.OfficialRating}</div>
+                {media.IsHD ? (
+                  <div className="bg-white text-black px-2 rounded-md font-bold py-0.5">
+                    HD
+                  </div>
+                ) : null}
               </div>
-              <div className="font-semibold">{media.OfficialRating}</div>
-              {media.IsHD ? (
-                <div className="bg-white text-black px-2 rounded-md font-bold py-0.5">
-                  HD
+              {media.Type === "Movie" || media.Type === "Episode" ? (
+                <div>
+                  <Link
+                    to={`/playback/${mediaId}?resume=${media.UserData.PlaybackPositionTicks}`}
+                    className="bg-white transition hover:opacity-70 flex items-center gap-x-2 px-2 py-1 rounded-md text-lg font-semibold text-black w-fit"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="w-5 h-5"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    {media.UserData.Played
+                      ? "Watch Again"
+                      : media.UserData.PlaybackPositionTicks !== 0
+                      ? "Resume"
+                      : "Play"}
+                  </Link>
                 </div>
               ) : null}
             </div>
-            {media.Type === "Movie" || media.Type === "Episode" ? (
-              <div>
-                <Link
-                  to={`/playback/${mediaId}?resume=${media.UserData.PlaybackPositionTicks}`}
-                  className="bg-white transition hover:opacity-70 flex items-center gap-x-2 px-2 py-1 rounded-md text-lg font-semibold text-black w-fit"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className="w-5 h-5"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  {media.UserData.PlaybackPositionTicks !== 0
-                    ? "Resume"
-                    : "Play"}
-                </Link>
-              </div>
-            ) : null}
+            <div className="flex">
+              <button className="">Metadata</button>
+            </div>
           </div>
         </div>
         {media.Type === "Series" ? <AllSeasons media={media} /> : null}

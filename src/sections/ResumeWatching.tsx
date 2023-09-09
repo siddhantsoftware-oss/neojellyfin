@@ -87,7 +87,7 @@ export const MediaTab = ({ media }: { media: MediaType }) => {
       </div>
       <div className="pt-0.5 flex flex-col items-center  ">
         <Link
-          to={"/collection/media/" + media.SeriesId}
+          to={"/collection/media/" + (media.SeriesId ?? media.Id)}
           className="text-lg font-semibold hover:text-primary transition"
         >
           {media.SeriesName ?? media.Name}
