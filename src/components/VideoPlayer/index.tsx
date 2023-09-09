@@ -88,18 +88,16 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
               type="range"
               className="w-full "
               value={
-                (props.currentTime / props.playerRef.current.getDuration()) *
-                100
+                props.currentTime
               }
               onChange={(e) => {
                 props.playerRef.current?.seekTo(
-                  (e.target.valueAsNumber/100) *
-                    props.playerRef.current.getDuration(),
+                  e.target.valueAsNumber,
                   "seconds"
                 );
               }}
               min={0}
-              max={100}
+              max={props.playerRef.current.getDuration()}
             />
           </div>
           <div className="grid grid-cols-3 w-full px-10 bg-secondary/20 backdrop-blur-sm pt-8 py-5 bottom-0 left-0">
