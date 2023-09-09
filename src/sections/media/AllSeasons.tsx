@@ -1,4 +1,3 @@
-import React from "react";
 import { Media } from "../../pages/collection/media/id";
 import { useQuery } from "react-query";
 import { getAuth } from "../../pages/root";

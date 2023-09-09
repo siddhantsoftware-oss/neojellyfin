@@ -6,10 +6,6 @@ import { useRef } from "react";
 import Loading from "../../components/Loading";
 import ReactPlayer from "react-player";
 
-export function ticksToSeconds(ticks: number) {
-  return ticks / 10000000;
-}
-
 function MediaPlayback() {
   const mediaId = useLocation().pathname.replace("/playback/", "");
   const resumeTicks = useLocation().search.replace("?resume=", "") ?? 0;
@@ -87,7 +83,7 @@ function MediaPlayback() {
             }
           ).then(() => {
             playerRef.current?.seekTo(
-              ticksToSeconds(Number(resumeTicks)),
+              Number(resumeTicks) / 10000000,
               "seconds"
             );
           })
@@ -109,7 +105,7 @@ function MediaPlayback() {
         playing={true}
         ref={playerRef}
         width={"100%"}
-        height={'100vh'}
+        height={"100vh"}
         style={{
           backgroundColor: "black",
         }}
