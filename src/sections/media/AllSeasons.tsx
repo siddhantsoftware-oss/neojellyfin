@@ -1,10 +1,10 @@
-import { Media } from "../../pages/collection/media/id";
 import { useQuery } from "react-query";
 import { getAuth } from "../../pages/root";
 import Image from "../../components/Image";
 import { Link } from "react-router-dom";
+import { MediaType } from "../RecentlyAdded";
 
-function AllSeasons({ media }: { media: Media }) {
+function AllSeasons({ media }: { media: MediaType }) {
   const { data: seasons } = useQuery(media.Id, () =>
     fetch(
       `${localStorage.getItem("address")}/Shows/${
@@ -17,13 +17,7 @@ function AllSeasons({ media }: { media: Media }) {
       }
     )
       .then((res) => res.json())
-      .then(
-        (result) =>
-          result.Items as {
-            Id: string;
-            Name: string;
-          }[]
-      )
+      .then((result) => result.Items as MediaType[])
   );
 
   if (!seasons) {
@@ -48,8 +42,13 @@ function AllSeasons({ media }: { media: Media }) {
               width={210}
               className="rounded-md"
             />
-            <div className="text-xl font-semibold text-center">
-              {season.Name}
+            <div>
+              <div className="text-xl font-semibold text-center">
+                {season.Name}
+              </div>
+              <div className="text-sm text-center opacity-80">
+                {season.UserData.UnplayedItemCount} Episodes Remaining
+              </div>
             </div>
           </Link>
         ))}
