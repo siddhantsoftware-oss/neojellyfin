@@ -23,6 +23,11 @@ export interface MediaType {
       [key: string]: string;
     };
   };
+  UserData: {
+    UnplayedItemCount?: number;
+    PlayedPercentage: number;
+    PlaybackPositionTicks: number;
+  };
 }
 
 function RecentlyAdded() {

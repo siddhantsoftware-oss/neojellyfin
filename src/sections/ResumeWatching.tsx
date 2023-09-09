@@ -4,12 +4,6 @@ import { MediaType } from "./RecentlyAdded";
 import { Link } from "react-router-dom";
 import Image from "../components/Image";
 
-interface ResumeMedia extends MediaType {
-  UserData: {
-    PlayedPercentage: number;
-    PlaybackPositionTicks: number;
-  };
-}
 
 function ResumeWatching() {
   const { data, isLoading } = useQuery("resume", () =>
@@ -24,7 +18,7 @@ function ResumeWatching() {
       }
     )
       .then((res) => res.json())
-      .then((result) => result.Items as ResumeMedia[])
+      .then((result) => result.Items as MediaType[])
   );
 
   return (
@@ -40,7 +34,7 @@ function ResumeWatching() {
   );
 }
 
-const ResumeMediaTab = ({ media }: { media: ResumeMedia }) => {
+const ResumeMediaTab = ({ media }: { media: MediaType }) => {
   return (
     <div className="shrink-0 group/cover">
       <div className="relative aspect-[16/9] min-w-[400px]">

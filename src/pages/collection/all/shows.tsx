@@ -51,7 +51,9 @@ function AllShowsList() {
 
   return (
     <div className="px-10 flex flex-col gap-y-5">
-      <div className="text-5xl  pb-8 pt-5 font-semibold ">{collection.Name}</div>
+      <div className="text-5xl  pb-8 pt-5 font-semibold ">
+        {collection.Name}
+      </div>
       <div className="flex flex-wrap gap-5">
         {items.map((item, key) => (
           <VerticalCover key={key} media={item} />
@@ -65,10 +67,10 @@ export const VerticalCover = ({ media }: { media: MediaType }) => {
   return (
     <Link
       to={`/collection/media/${media.Id}`}
-      className="hover:scale-105 hover:opacity-80 transition"
+      className="hover:scale-105 hover:opacity-80 transition relative"
     >
       <Image
-        Ratio={2/3}
+        Ratio={2 / 3}
         alt={media.Name}
         src={`${localStorage.getItem("address")}/Items/${
           media.SeriesId ?? media.Id
