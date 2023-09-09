@@ -100,21 +100,16 @@ function MediaPlayback() {
     }
   );
 
-  const [videoLength, setVideoLength] = useState(0);
-  const [playing, setPlaying] = useState(true);
 
   if (!mediaUrl) {
     return <Loading />;
   }
 
   return (
-    <div className=" h-screen flex place-items-center max-h-screen justify-center">
+    <div className=" h-screen outline-none  flex place-items-center max-h-screen justify-center">
       <VideoPlayer
-        playing={playing}
-        setPlaying={setPlaying}
         sessionId={mediaUrl.PlaySessionId}
         mediaId={mediaId}
-        fullVideoLength={videoLength}
         currentTime={currentTime}
         playerRef={playerRef}
       >
@@ -123,22 +118,22 @@ function MediaPlayback() {
           url={`${localStorage.getItem("address")}${
             mediaUrl.MediaSources[0].TranscodingUrl + ""
           }`}
+          
+          controls
           playbackRate={1}
-          playing={playing}
           ref={playerRef}
           width={"100%"}
           height={"100vh"}
           style={{
             backgroundColor: "black",
+            outline: '2px solid transparent'
           }}
           config={{
             file: {
               forceHLS: true,
             },
           }}
-          onDuration={(duration) => setVideoLength(duration)}
           onPause={() => {
-            setPlaying(false);
             fetch(
               `${localStorage.getItem("address")}/Sessions/Playing/Progress`,
               {
@@ -165,7 +160,6 @@ function MediaPlayback() {
             );
           }}
           onPlay={() => {
-            setPlaying(true);
             fetch(
               `${localStorage.getItem("address")}/Sessions/Playing/Progress`,
               {
@@ -192,7 +186,6 @@ function MediaPlayback() {
             );
           }}
           onSeek={() => {
-            setPlaying(true);
             fetch(
               `${localStorage.getItem("address")}/Sessions/Playing/Progress`,
               {
