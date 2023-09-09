@@ -9,7 +9,7 @@ function AllEpisodes({ media }: { media: Media }) {
     fetch(
       `${localStorage.getItem("address")}/Shows/${
         media.ParentId
-      }/Episodes?seasonId=${media.Id}`,
+      }/Episodes?seasonId=${media.Id}&userId=${localStorage.getItem("userId")}`,
       {
         headers: {
           Authorization: getAuth(localStorage.getItem("AccessToken") ?? ""),
@@ -22,6 +22,9 @@ function AllEpisodes({ media }: { media: Media }) {
           result.Items as {
             Name: string;
             Id: string;
+            UserData: {
+              PlaybackPositionTicks: number;
+            };
           }[]
       )
   );
@@ -36,7 +39,12 @@ function AllEpisodes({ media }: { media: Media }) {
       <div className="flex flex-wrap gap-5">
         {episodes.map((episode, key) => (
           <Link
-            to={"/playback/" + episode.Id}
+            to={
+              "/playback/" +
+              episode.Id +
+              "?resume=" +
+              episode.UserData.PlaybackPositionTicks
+            }
             key={key}
             className="flex hover:scale-105 transition group/cover flex-col  "
           >
