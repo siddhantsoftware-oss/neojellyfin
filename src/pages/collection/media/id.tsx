@@ -115,7 +115,7 @@ function MoviePage() {
             {media.Type === "Movie" || media.Type === "Episode" ? (
               <div>
                 <Link
-                  to={`/playback/${mediaId}`}
+                  to={`/playback/${mediaId}?resume=${media.UserData.PlaybackPositionTicks}`}
                   className="bg-white transition hover:opacity-70 flex items-center gap-x-2 px-2 py-1 rounded-md text-lg font-semibold text-black w-fit"
                 >
                   <svg

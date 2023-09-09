@@ -86,7 +86,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
           <div className="absolute top-0 z-20 w-full">
             <input
               type="range"
-              className="w-full "
+              className="w-full cursor-pointer "
               value={
                 props.currentTime
               }
