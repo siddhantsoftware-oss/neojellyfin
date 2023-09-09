@@ -21,6 +21,10 @@ function NextUpMedia() {
       .then((result) => result.Items as MediaType[])
   );
 
+  if (!items || items.length === 0) {
+    return null;
+  }
+
   return (
     <div className="px-10 flex flex-col gap-y-3">
       <div className="text-3xl font-semibold">Next Up</div>

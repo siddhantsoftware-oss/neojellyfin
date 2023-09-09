@@ -20,6 +20,10 @@ function ResumeWatching() {
       .then((result) => result.Items as MediaType[])
   );
 
+  if (!data || data.length === 0) {
+    return null;
+  }
+
   return (
     <div className="px-10 flex flex-col gap-y-3">
       <div className="text-3xl font-semibold">Continue Watching</div>
