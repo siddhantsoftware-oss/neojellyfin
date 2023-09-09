@@ -26,17 +26,17 @@ function ResumeWatching() {
       <div className="flex gap-x-5 overflow-x-scroll pb-5">
         {isLoading ? <div className="aspect-[16/9] min-w-[400px]"></div> : null}
         {data?.map((media, key) => (
-          <ResumeMediaTab key={key} media={media} />
+          <MediaTab key={key} media={media} />
         ))}
       </div>
     </div>
   );
 }
 
-const ResumeMediaTab = ({ media }: { media: MediaType }) => {
+export const MediaTab = ({ media }: { media: MediaType }) => {
   return (
-    <div className="shrink-0 group/cover">
-      <div className="relative aspect-[16/9] min-w-[400px]">
+    <div className="shrink-0 ">
+      <div className="relative aspect-[16/9] group/cover min-w-[400px]">
         <Image
           Ratio={16 / 9}
           src={`${localStorage.getItem("address")}/Items/${media.Id}/Images/${
@@ -45,13 +45,17 @@ const ResumeMediaTab = ({ media }: { media: MediaType }) => {
           alt=""
           className="w-[400px] rounded-md overflow-clip aspect-[16/9]"
         />
-        <div
-          style={{
-            width: media.UserData.PlayedPercentage + "%",
-          }}
-          className="absolute h-[5px] z-20 bg-primary bottom-0 left-0 rounded-bl-md"
-        ></div>
-        <div className="absolute h-[5px] z-10 bg-secondary/80 w-full bottom-0 left-0 rounded-b-md"></div>
+        {media.UserData.PlayedPercentage ? (
+          <>
+            <div
+              style={{
+                width: media.UserData.PlayedPercentage + "%",
+              }}
+              className="absolute h-[5px] z-20 bg-primary bottom-0 left-0 rounded-bl-md"
+            ></div>
+            <div className="absolute h-[5px] z-10 bg-secondary/80 w-full bottom-0 left-0 rounded-b-md"></div>
+          </>
+        ) : null}
         <div className="absolute z-30 invisible group-hover/cover:visible transition top-0 left-0 w-full h-full bg-black/70 backdrop-blur-sm flex place-items-center justify-center">
           <Link
             to={
@@ -78,9 +82,12 @@ const ResumeMediaTab = ({ media }: { media: MediaType }) => {
         </div>
       </div>
       <div className="pt-0.5 flex flex-col items-center  ">
-        <div className="text-lg font-semibold">
+        <Link
+          to={"/collection/media/" + media.SeriesId}
+          className="text-lg font-semibold hover:text-primary transition"
+        >
           {media.SeriesName ?? media.Name}
-        </div>
+        </Link>
         {media.SeriesName ? (
           <div className="opacity-70">
             S{media.ParentIndexNumber} E{media.IndexNumber}
