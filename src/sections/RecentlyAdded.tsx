@@ -28,6 +28,8 @@ export interface MediaType {
     PlayedPercentage: number;
     PlaybackPositionTicks: number;
   };
+  ParentIndexNumber: number
+  IndexNumber: number
 }
 
 function RecentlyAdded() {

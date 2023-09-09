@@ -4,7 +4,6 @@ import { MediaType } from "./RecentlyAdded";
 import { Link } from "react-router-dom";
 import Image from "../components/Image";
 
-
 function ResumeWatching() {
   const { data, isLoading } = useQuery("resume", () =>
     fetch(
@@ -77,6 +76,16 @@ const ResumeMediaTab = ({ media }: { media: MediaType }) => {
             </svg>
           </Link>
         </div>
+      </div>
+      <div className="pt-0.5 flex flex-col items-center  ">
+        <div className="text-lg font-semibold">
+          {media.SeriesName ?? media.Name}
+        </div>
+        {media.SeriesName ? (
+          <div className="opacity-70">
+            S{media.ParentIndexNumber} E{media.IndexNumber}
+          </div>
+        ) : null}
       </div>
     </div>
   );
