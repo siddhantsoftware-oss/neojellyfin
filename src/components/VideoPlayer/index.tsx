@@ -16,13 +16,19 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
   };
 
   const getTimeStandard = (seconds: number) => {
-    const hours = Math.floor(seconds / 3600)
-    const minutes = Math.floor(seconds / 60)
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor(seconds / 60);
 
-    return <div>
-        {hours<10?0:null}{hours}:{(minutes - (60*hours))<10?0:null}{minutes - (60*hours)}:{(Math.round(seconds) - (minutes*60)) < 10 ? 0: null}{Math.round(seconds) - (minutes*60)}
-    </div>
-  }
+    return (
+      <div>
+        {hours < 10 ? 0 : null}
+        {hours}:{minutes - 60 * hours < 10 ? 0 : null}
+        {minutes - 60 * hours}:
+        {Math.round(seconds) - minutes * 60 < 10 ? 0 : null}
+        {Math.round(seconds) - minutes * 60}
+      </div>
+    );
+  };
 
   const navigate = useNavigate();
   return (
@@ -76,32 +82,54 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
       </div>
       <div>{props.children}</div>
       {props.playerRef.current !== null ? (
-        <div className="absolute grid grid-cols-3 w-full px-10 bg-secondary/20 backdrop-blur-sm py-5 bottom-0 left-0">
-          <div className="text-sm opacity-70 text-left flex gap-x-1">
-          {getTimeStandard(props.currentTime)}/{getTimeStandard(props.fullVideoLength)}
-          </div>
-          <div className="flex justify-center">
-            <button
-              onClick={() => {
-                pauseStream();
-                console.log("hi");
+        <div className="flex absolute w-full bottom-0 flex-col">
+          <div className="absolute top-0 z-20 w-full">
+            <input
+              type="range"
+              className="w-full "
+              value={
+                (props.currentTime / props.playerRef.current.getDuration()) *
+                100
+              }
+              onChange={(e) => {
+                props.playerRef.current?.seekTo(
+                  (e.target.valueAsNumber/100) *
+                    props.playerRef.current.getDuration(),
+                  "seconds"
+                );
               }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
+              min={0}
+              max={100}
+            />
           </div>
-          <div className="flex justify-end">hi</div>
+          <div className="grid grid-cols-3 w-full px-10 bg-secondary/20 backdrop-blur-sm pt-8 py-5 bottom-0 left-0">
+            <div className="text-sm opacity-70 text-left flex gap-x-1">
+              {getTimeStandard(props.currentTime)}/
+              {getTimeStandard(props.fullVideoLength)}
+            </div>
+            <div className="flex justify-center">
+              <button
+                onClick={() => {
+                  pauseStream();
+                  console.log("hi");
+                }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div className="flex justify-end">hi</div>
+          </div>
         </div>
       ) : null}
     </div>
