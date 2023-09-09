@@ -52,7 +52,7 @@ const ResumeMediaTab = ({ media }: { media: MediaType }) => {
           }}
           className="absolute h-[5px] z-20 bg-primary bottom-0 left-0 rounded-bl-md"
         ></div>
-        <div className="absolute h-[5px] z-10 bg-secondary/80 w-full bottom-0 left-0 rounded-bl-md"></div>
+        <div className="absolute h-[5px] z-10 bg-secondary/80 w-full bottom-0 left-0 rounded-b-md"></div>
         <div className="absolute z-30 invisible group-hover/cover:visible transition top-0 left-0 w-full h-full bg-black/70 backdrop-blur-sm flex place-items-center justify-center">
           <Link
             to={
