@@ -18,7 +18,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
         <button
           onClick={() => {
             fetch(
-              `${localStorage.getItem("address")}/Sessions/Playing/Progress`,
+              `${localStorage.getItem("address")}/Sessions/Playing/Stopped`,
               {
                 method: "POST",
                 headers: {
