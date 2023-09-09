@@ -1,6 +1,7 @@
 import ReactPlayer from "react-player";
 import { useNavigate } from "react-router-dom";
 import { getAuth } from "../../pages/root";
+import { useEffect, useState } from "react";
 
 interface VideoPlayerProps {
   children: React.JSX.Element;
@@ -30,9 +31,22 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
     );
   };
 
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    function onFullscreenChange() {
+      setIsFullscreen(Boolean(document.fullscreenElement));
+    }
+
+    document.addEventListener("fullscreenchange", onFullscreenChange);
+
+    return () =>
+      document.removeEventListener("fullscreenchange", onFullscreenChange);
+  }, []);
+
   const navigate = useNavigate();
   return (
-    <div className="h-screen w-screen relative">
+    <div id="video-player" className="h-screen w-screen relative">
       <div className="absolute z-20 top-0 left-0 py-5 px-10 ">
         <button
           onClick={() => {
@@ -87,9 +101,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
             <input
               type="range"
               className="w-full cursor-pointer "
-              value={
-                props.currentTime
-              }
+              value={props.currentTime}
               onChange={(e) => {
                 props.playerRef.current?.seekTo(
                   e.target.valueAsNumber,
@@ -126,7 +138,54 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
                 </svg>
               </button>
             </div>
-            <div className="flex justify-end">hi</div>
+            <div className="flex justify-end">
+              {isFullscreen ? (
+                <button
+                  onClick={() => {
+                    document.exitFullscreen();
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25"
+                    />
+                  </svg>
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    const element = document.getElementById("video-player");
+                    if (element?.requestFullscreen) {
+                      element.requestFullscreen();
+                    }
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"
+                    />
+                  </svg>
+                </button>
+              )}
+            </div>
           </div>
         </div>
       ) : null}
