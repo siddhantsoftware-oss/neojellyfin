@@ -15,6 +15,15 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
     props.playerRef.current?.getInternalPlayer("hls");
   };
 
+  const getTimeStandard = (seconds: number) => {
+    const hours = Math.floor(seconds / 3600)
+    const minutes = Math.floor(seconds / 60)
+
+    return <div>
+        {hours<10?0:null}{hours}:{(minutes - (60*hours))<10?0:null}{minutes - (60*hours)}:{(Math.round(seconds) - (minutes*60)) < 10 ? 0: null}{Math.round(seconds) - (minutes*60)}
+    </div>
+  }
+
   const navigate = useNavigate();
   return (
     <div className="h-screen w-screen relative">
@@ -68,15 +77,8 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
       <div>{props.children}</div>
       {props.playerRef.current !== null ? (
         <div className="absolute grid grid-cols-3 w-full px-10 bg-secondary/20 backdrop-blur-sm py-5 bottom-0 left-0">
-          <div className="text-sm opacity-70 text-left">
-            {Math.round(props.currentTime / 60) < 10 ? 0 : null}
-            {Math.floor(props.currentTime / 60)}:
-            {Math.round(props.currentTime % 60) < 10 ? 0 : null}
-            {Math.round(props.currentTime % 60)} /{" "}
-            {Math.round(props.fullVideoLength / 60) < 10 ? 0 : null}
-            {Math.floor(props.fullVideoLength / 60)}:
-            {Math.round(props.fullVideoLength % 60) < 10 ? 0 : null}
-            {Math.round(props.fullVideoLength % 60)}
+          <div className="text-sm opacity-70 text-left flex gap-x-1">
+          {getTimeStandard(props.currentTime)}/{getTimeStandard(props.fullVideoLength)}
           </div>
           <div className="flex justify-center">
             <button
