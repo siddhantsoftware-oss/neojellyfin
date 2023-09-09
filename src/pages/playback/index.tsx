@@ -101,6 +101,7 @@ function MediaPlayback() {
   );
 
   const [videoLength, setVideoLength] = useState(0);
+  const [playing, setPlaying] = useState(true);
 
   if (!mediaUrl) {
     return <Loading />;
@@ -109,6 +110,8 @@ function MediaPlayback() {
   return (
     <div className=" h-screen flex place-items-center max-h-screen justify-center">
       <VideoPlayer
+        playing={playing}
+        setPlaying={setPlaying}
         sessionId={mediaUrl.PlaySessionId}
         mediaId={mediaId}
         fullVideoLength={videoLength}
@@ -121,7 +124,7 @@ function MediaPlayback() {
             mediaUrl.MediaSources[0].TranscodingUrl + ""
           }`}
           playbackRate={1}
-          playing={true}
+          playing={playing}
           ref={playerRef}
           width={"100%"}
           height={"100vh"}
@@ -134,6 +137,86 @@ function MediaPlayback() {
             },
           }}
           onDuration={(duration) => setVideoLength(duration)}
+          onPause={() => {
+            setPlaying(false);
+            fetch(
+              `${localStorage.getItem("address")}/Sessions/Playing/Progress`,
+              {
+                method: "POST",
+                headers: {
+                  Authorization: getAuth(
+                    localStorage.getItem("AccessToken") ?? ""
+                  ),
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  AudioStreamIndex: 1,
+                  CanSeek: true,
+                  IsPaused: true,
+                  EventName: "pause",
+                  PlayMethod: "Transcode",
+                  PlaySessionId: mediaUrl.PlaySessionId,
+                  PositionTicks: Math.round(
+                    (playerRef.current?.getCurrentTime() ?? 0) * 1000000
+                  ),
+                  RepeatMode: "RepeatNone",
+                }),
+              }
+            );
+          }}
+          onPlay={() => {
+            setPlaying(true);
+            fetch(
+              `${localStorage.getItem("address")}/Sessions/Playing/Progress`,
+              {
+                method: "POST",
+                headers: {
+                  Authorization: getAuth(
+                    localStorage.getItem("AccessToken") ?? ""
+                  ),
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  AudioStreamIndex: 1,
+                  CanSeek: true,
+                  IsPaused: false,
+                  EventName: "unpause",
+                  PlayMethod: "Transcode",
+                  PlaySessionId: mediaUrl.PlaySessionId,
+                  PositionTicks: Math.round(
+                    (playerRef.current?.getCurrentTime() ?? 0) * 1000000
+                  ),
+                  RepeatMode: "RepeatNone",
+                }),
+              }
+            );
+          }}
+          onSeek={() => {
+            setPlaying(true);
+            fetch(
+              `${localStorage.getItem("address")}/Sessions/Playing/Progress`,
+              {
+                method: "POST",
+                headers: {
+                  Authorization: getAuth(
+                    localStorage.getItem("AccessToken") ?? ""
+                  ),
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  AudioStreamIndex: 1,
+                  CanSeek: true,
+                  EventName: "timeupdate",
+                  PlayMethod: "Transcode",
+                  PlaySessionId: mediaUrl.PlaySessionId,
+                  PositionTicks: Math.round(
+                    (playerRef.current?.getCurrentTime() ?? 0) * 1000000
+                  ),
+                  RepeatMode: "RepeatNone",
+                }),
+              }
+            );
+          }}
         />
       </VideoPlayer>
     </div>

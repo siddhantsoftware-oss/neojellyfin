@@ -1,7 +1,7 @@
 import ReactPlayer from "react-player";
 import { useNavigate } from "react-router-dom";
 import { getAuth } from "../../pages/root";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 
 interface VideoPlayerProps {
   children: React.JSX.Element;
@@ -10,10 +10,12 @@ interface VideoPlayerProps {
   currentTime: number;
   mediaId: string;
   sessionId: string;
+  setPlaying: React.Dispatch<SetStateAction<boolean>>;
+  playing: boolean;
 }
 export const VideoPlayer = (props: VideoPlayerProps) => {
   const pauseStream = () => {
-    props.playerRef.current?.getInternalPlayer("hls");
+    props.setPlaying((e) => !e);
   };
 
   const getTimeStandard = (seconds: number) => {
@@ -62,7 +64,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
                 },
                 body: JSON.stringify({
                   IsPaused: true,
-                  PositionTicks: props.currentTime * 10000000,
+                  PositionTicks: Math.round(props.currentTime * 10000000),
                   PlaySessionId: props.sessionId,
                   ItemId: props.mediaId,
                   UserId: localStorage.getItem("userId"),
@@ -112,7 +114,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
               max={props.playerRef.current.getDuration()}
             />
           </div>
-          <div className="grid grid-cols-3 w-full px-10 bg-secondary/20 backdrop-blur-sm pt-8 py-5 bottom-0 left-0">
+          <div className="grid grid-cols-3 w-full px-10 bg-accent/80 backdrop-blur-sm pt-8 py-5 bottom-0 left-0">
             <div className="text-sm opacity-70 text-left flex gap-x-1">
               {getTimeStandard(props.currentTime)}/
               {getTimeStandard(props.fullVideoLength)}
@@ -121,21 +123,35 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
               <button
                 onClick={() => {
                   pauseStream();
-                  console.log("hi");
                 }}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+                {props.playing ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                )}
               </button>
             </div>
             <div className="flex justify-end">
