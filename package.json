@@ -11,6 +11,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.17",
+    "@heroicons/react": "^2.0.18",
     "@jellyfin/sdk": "^0.8.2",
     "is-url-http": "^2.3.6",
     "react": "^18.2.0",
