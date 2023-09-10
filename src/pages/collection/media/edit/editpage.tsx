@@ -57,8 +57,7 @@ function EditPage() {
         ),
   });
 
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   type UpdateProps = {
     Artists: string[];
@@ -83,10 +82,10 @@ function EditPage() {
           body: JSON.stringify(props),
         }
       ),
-      onSuccess: () => navigate(-1)
+    onSuccess: () => navigate(-1),
   });
 
-  const { data: media } = useQuery(mediaId, () =>
+  const { data: media } = useQuery(mediaId + "_metadata", () =>
     fetch(
       `${localStorage.getItem("address")}/Users/${localStorage.getItem(
         "userId"
@@ -160,7 +159,7 @@ function EditPage() {
           {searchForMatches.data.map((item, idx) => (
             <button
               onClick={(e) => {
-                e.preventDefault()
+                e.preventDefault();
                 updateInformation({
                   Artists: item.Artists,
                   ImageUrl: item?.ImageUrl ?? "",
