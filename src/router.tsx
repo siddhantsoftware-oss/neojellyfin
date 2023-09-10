@@ -5,6 +5,7 @@ import MoviePage from "./pages/collection/media/id";
 import ViewMovieLibrary from "./pages/collection/all/movies";
 import MediaPlayback from "./pages/playback";
 import AllShowsList from "./pages/collection/all/shows";
+import EditPage from "./pages/collection/media/edit/editpage";
 
 const AppRouter = () => (
   <BrowserRouter>
@@ -15,6 +16,7 @@ const AppRouter = () => (
       <Route path="/collection/movies/all/:id" element={<ViewMovieLibrary />} />
       <Route path="/playback/:media" element={<MediaPlayback />} />
       <Route path="/collection/shows/all/:id" element={<AllShowsList />} />
+      <Route path="/collection/media/:id/edit" element={<EditPage />} />
     </Routes>
   </BrowserRouter>
 );

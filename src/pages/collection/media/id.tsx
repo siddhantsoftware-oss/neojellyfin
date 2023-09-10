@@ -156,7 +156,9 @@ function MoviePage() {
               ) : null}
             </div>
             <div className="flex">
-              <button className="">Metadata</button>
+              <Link to={"/collection/media/" + mediaId + "/edit"} className="">
+                Metadata
+              </Link>
             </div>
           </div>
         </div>
