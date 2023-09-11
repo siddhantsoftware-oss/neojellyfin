@@ -34,7 +34,7 @@ function ViewAllCollections() {
             <Link
               key={idx}
               to={`/collection/${item.SortName}/all/${item.Id}`}
-              className="bg-white shrink-0 text-xl font-semibold text-black hover:opacity-70 transition w-[180px] flex justify-center place-items-center rounded-md h-[80px]"
+              className="bg-white shrink-0 md:text-xl text-lg font-semibold text-black hover:opacity-70 transition md:w-[180px] w-[30vw] flex justify-center place-items-center rounded-md md:h-[80px] h-[8vh]"
             >
               {item.Name}
             </Link>
