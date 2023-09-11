@@ -29,7 +29,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
 
   return (
     <div id="video-player" className="h-screen w-screen relative">
-      <div className="absolute z-20 top-0 left-0 py-5 md:px-10 px-3 ">
+      <div className="absolute z-20 top-0 left-0 w-full bg-gradient-to-b from-black/60  h-[8vh] to-transparent py-5 md:px-10 px-3 ">
         <button
           onClick={() => {
             fetch(
@@ -80,17 +80,19 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
       {props.playerRef.current ? (
         <div className="absolute flex justify-between  bottom-0 bg-accent/70 backdrop-blur-md py-3 px-10 w-full">
           <div className="flex gap-x-1 opacity-80">
-          <TimeCounter
-            long={(props.playerRef.current?.getDuration() ?? 0) > 3600}
-            time={props.playerRef.current?.getCurrentTime() ?? 0}
-          />{" "}
-          /{" "}
-          <TimeCounter
-            long={(props.playerRef.current?.getDuration() ?? 0) > 3600}
-            time={props.playerRef.current?.getDuration() ?? 0}
-          />
+            <TimeCounter
+              long={(props.playerRef.current?.getDuration() ?? 0) > 3600}
+              time={props.playerRef.current?.getCurrentTime() ?? 0}
+            />{" "}
+            /{" "}
+            <TimeCounter
+              long={(props.playerRef.current?.getDuration() ?? 0) > 3600}
+              time={props.playerRef.current?.getDuration() ?? 0}
+            />
           </div>
-          <div><button></button></div>
+          <div>
+            <button></button>
+          </div>
           <div>settings</div>
         </div>
       ) : null}
