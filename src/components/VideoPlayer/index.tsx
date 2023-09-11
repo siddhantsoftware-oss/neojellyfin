@@ -9,6 +9,13 @@ interface VideoPlayerProps {
   currentTime: number;
   mediaId: string;
   sessionId: string;
+  MediaStreams: {
+    Type: string;
+    DisplayTitle: string;
+    Index: number
+  }[];
+  defaultSubtitleStream: number;
+  defaultAudioStream: number
 }
 export const VideoPlayer = (props: VideoPlayerProps) => {
   const navigate = useNavigate();
@@ -173,13 +180,29 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
                   className="bg-accent px-2 py-1 rounded-sm font-semibold"
                   name=""
                   id=""
+                  defaultValue={props.defaultSubtitleStream}
                 >
-                  <option value="4k">4K</option>
-                  <option value="4k">1080p</option>
-                  <option value="4k">4K</option>
-                  <option value="4k">4K</option>
-                  <option value="4k">4K</option>
-                  <option value="4k">4K</option>
+                  {props.MediaStreams.filter((e) => e.Type === "Subtitle").map(
+                    (stream) => (
+                      <option value={stream.Index} key="">
+                        {stream.DisplayTitle}
+                      </option>
+                    )
+                  )}
+                </select>
+                <select
+                  className="bg-accent px-2 py-1 rounded-sm font-semibold"
+                  name=""
+                  id=""
+                  defaultValue={props.defaultSubtitleStream}
+                >
+                  {props.MediaStreams.filter((e) => e.Type === "Audio").map(
+                    (stream) => (
+                      <option value={stream.Index} key="">
+                        {stream.DisplayTitle}
+                      </option>
+                    )
+                  )}
                 </select>
               </div>
             </div>

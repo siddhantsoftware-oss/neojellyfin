@@ -9,7 +9,8 @@ const usePlayer = create<PlayerInterface>((set)=>({
     playing: true,
     setPlaying: (playing) => set(()=>({
         playing: playing
-    }))
+    })),
+    currentMaxBitrate: 80000
 }))
 
 export default usePlayer

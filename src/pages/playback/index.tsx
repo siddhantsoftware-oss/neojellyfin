@@ -115,10 +115,14 @@ function MediaPlayback() {
   return (
     <div className=" h-screen outline-none  flex place-items-center max-h-screen justify-center">
       <VideoPlayer
+        MediaStreams={media.MediaSources[0].MediaStreams}
         sessionId={media.PlaySessionId}
+        defaultSubtitleStream={media.MediaSources[0].DefaultSubtitleStreamIndex}
+        defaultAudioStream={media.MediaSources[0].DefaultAudioStreamIndex}
         mediaId={mediaId}
         currentTime={currentTime}
         playerRef={playerRef}
+        
       >
         <ReactPlayer
           onProgress={onTimeUpdate}
