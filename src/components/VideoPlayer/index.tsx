@@ -87,7 +87,15 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
         <div className="absolute  bottom-0 w-full ">
           <div className="relative h-full">
             <div className="z-20 absolute left-0 top-0 -translate-y-[110%] w-full">
-              <input type="range" className="w-full translate-y-[100%]  " />
+              <input
+                onChange={(e) => {
+                  props.playerRef.current?.seekTo(e.target.valueAsNumber);
+                }}
+                max={props.playerRef.current.getDuration()}
+                value={props.playerRef.current.getCurrentTime()}
+                type="range"
+                className="w-full translate-y-[100%]  "
+              />
             </div>
             <div className="flex justify-between bg-accent/70 backdrop-blur-md pb-4 pt-6 px-10 w-full">
               <div className="flex gap-x-1 opacity-80 ">
