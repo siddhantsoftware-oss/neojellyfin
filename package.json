@@ -14,6 +14,7 @@
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
     "@jellyfin/sdk": "^0.8.2",
+    "@radix-ui/react-popover": "^1.0.6",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "is-url-http": "^2.3.6",

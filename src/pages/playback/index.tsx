@@ -15,14 +15,19 @@ function MediaPlayback() {
 
   const [currentTime, setCurrentTime] = useState(0);
 
-
-
   const onTimeUpdate = () => {
     const ref = playerRef.current;
     if (ref) {
       setCurrentTime(ref.getCurrentTime());
     }
   };
+
+  const [setAudioIndex, setSubtitleIndex, audioIndex, subtitleIndex] = usePlayer((state) => [
+    state.setAudioStreamIndex,
+    state.setSubtitleStreamIndex,
+    state.audioStreamIndex,
+    state.subtitleStreamIndex,
+  ]);
 
   const { data: media } = useQuery(
     `${mediaId}-playback`,
@@ -45,7 +50,13 @@ function MediaPlayback() {
             DeviceProfile: DeviceProfile,
           }),
         }
-      ).then((res) => res.json()),
+      )
+        .then((res) => res.json())
+        .then((result) => {
+          setSubtitleIndex(result.MediaSources[0].DefaultSubtitleStreamIndex)
+          setAudioIndex(result.MediaSources[0].DefaultAudioStreamIndex)
+          return result
+        }),
     {
       retry: false,
       refetchOnWindowFocus: false,
@@ -61,10 +72,11 @@ function MediaPlayback() {
             ItemId: mediaId,
             IsMuted: false,
             MediaSourceId: mediaId,
+            AudioStreamIndex: audioIndex,
+            SubtitleStreamIndex: subtitleIndex,
             CanSeek: true,
             PlayMethod: "Transcode",
             PlaySessionId: result.PlaySessionId,
-            AudioStreamIndex: 1,
             PositionTicks: isNaN(Number(resumeTicks)) ? 0 : Number(resumeTicks),
             RepeatMode: "RepeatNone",
           }),
@@ -122,7 +134,6 @@ function MediaPlayback() {
         mediaId={mediaId}
         currentTime={currentTime}
         playerRef={playerRef}
-        
       >
         <ReactPlayer
           onProgress={onTimeUpdate}
@@ -173,7 +184,7 @@ function MediaPlayback() {
             );
           }}
           onPlay={() => {
-            setPlaying(true)
+            setPlaying(true);
             fetch(
               `${localStorage.getItem("address")}/Sessions/Playing/Progress`,
               {
