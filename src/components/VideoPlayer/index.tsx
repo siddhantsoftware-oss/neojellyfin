@@ -84,54 +84,61 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
       </div>
       <div>{props.children}</div>
       {props.playerRef.current ? (
-        <div className="absolute flex justify-between  bottom-0 bg-accent/70 backdrop-blur-md py-3 px-10 w-full">
-          <div className="flex gap-x-1 opacity-80">
-            <TimeCounter
-              long={(props.playerRef.current?.getDuration() ?? 0) > 3600}
-              time={props.playerRef.current?.getCurrentTime() ?? 0}
-            />{" "}
-            /{" "}
-            <TimeCounter
-              long={(props.playerRef.current?.getDuration() ?? 0) > 3600}
-              time={props.playerRef.current?.getDuration() ?? 0}
-            />
-          </div>
-          <div>
-            <button
-              onClick={() => {
-                setPlaying();
-              }}
-            >
-              {!playing ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="w-6 h-6"
+        <div className="absolute  bottom-0 w-full ">
+          <div className="relative h-full">
+            <div className="z-20 absolute left-0 top-0 -translate-y-[110%] w-full">
+              <input type="range" className="w-full translate-y-[100%]  " />
+            </div>
+            <div className="flex justify-between bg-accent/70 backdrop-blur-md pb-4 pt-6 px-10 w-full">
+              <div className="flex gap-x-1 opacity-80 ">
+                <TimeCounter
+                  long={(props.playerRef.current?.getDuration() ?? 0) > 3600}
+                  time={props.playerRef.current?.getCurrentTime() ?? 0}
+                />{" "}
+                /{" "}
+                <TimeCounter
+                  long={(props.playerRef.current?.getDuration() ?? 0) > 3600}
+                  time={props.playerRef.current?.getDuration() ?? 0}
+                />
+              </div>
+              <div>
+                <button
+                  onClick={() => {
+                    setPlaying(!playing);
+                  }}
                 >
-                  <path
-                    fillRule="evenodd"
-                    d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              )}
-            </button>
+                  {!playing ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  )}
+                </button>
+              </div>
+              <div>settings</div>
+            </div>
           </div>
-          <div>settings</div>
         </div>
       ) : null}
     </div>

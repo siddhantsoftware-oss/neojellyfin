@@ -101,7 +101,10 @@ function MediaPlayback() {
     }
   );
 
-  const [playing] = usePlayer(state=>[state.playing])
+  const [playing, setPlaying] = usePlayer((state) => [
+    state.playing,
+    state.setPlaying,
+  ]);
 
   if (!mediaUrl) {
     return <Loading />;
@@ -136,6 +139,8 @@ function MediaPlayback() {
             },
           }}
           onPause={() => {
+            setPlaying(false);
+
             fetch(
               `${localStorage.getItem("address")}/Sessions/Playing/Progress`,
               {
@@ -162,6 +167,7 @@ function MediaPlayback() {
             );
           }}
           onPlay={() => {
+            setPlaying(true)
             fetch(
               `${localStorage.getItem("address")}/Sessions/Playing/Progress`,
               {
