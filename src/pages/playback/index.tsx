@@ -134,6 +134,7 @@ function MediaPlayback() {
         defaultSubtitleStream={media.MediaSources[0].DefaultSubtitleStreamIndex}
         defaultAudioStream={media.MediaSources[0].DefaultAudioStreamIndex}
         mediaId={mediaId}
+        parentId={media.MediaSources[0].SeriesId ?? media.MediaSources[0].Id}
         currentTime={currentTime}
         playerRef={playerRef}
       >
@@ -147,8 +148,8 @@ function MediaPlayback() {
               `SubtitleStream=${media.MediaSources[0].DefaultAudioStreamIndex}`,
               ""
             ) +
-            "&SubtitleStreamIndex=" +
-            subtitleIndex
+            (subtitleIndex && subtitleIndex !== -1 ? "&SubtitleStreamIndex=" +
+            subtitleIndex : null)
           }`}
           playsinline
           playing={playing}

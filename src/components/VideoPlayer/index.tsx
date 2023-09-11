@@ -18,6 +18,7 @@ interface VideoPlayerProps {
   }[];
   defaultSubtitleStream: number;
   defaultAudioStream: number;
+  parentId: number;
 }
 export const VideoPlayer = (props: VideoPlayerProps) => {
   const navigate = useNavigate();
@@ -37,18 +38,23 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
     );
   };
 
-  const [playing, setPlaying, setAudioStream, audioStream, subtitleIndex, setSubtitleIndex] = usePlayer(
-    (state) => [
-      state.playing,
-      state.setPlaying,
-      state.setAudioStreamIndex,
-      state.audioStreamIndex,
-      state.subtitleStreamIndex,
-      state.setSubtitleStreamIndex
-    ]
-  );
+  const [
+    playing,
+    setPlaying,
+    setAudioStream,
+    audioStream,
+    subtitleIndex,
+    setSubtitleIndex,
+  ] = usePlayer((state) => [
+    state.playing,
+    state.setPlaying,
+    state.setAudioStreamIndex,
+    state.audioStreamIndex,
+    state.subtitleStreamIndex,
+    state.setSubtitleStreamIndex,
+  ]);
 
-  const query = useQueryClient()
+  const query = useQueryClient();
   return (
     <div id="video-player" className="h-screen w-screen relative">
       <div className="absolute z-20 top-0 left-0 w-full bg-gradient-to-b from-black/60  h-[8vh] to-transparent py-5 md:px-10 px-3 ">
@@ -80,7 +86,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
                 }),
               }
             );
-            navigate(-1);
+            navigate("/collection/media/" + props.parentId);
           }}
           className="flex gap-x-3 hover:-translate-x-2 transition"
         >
@@ -208,9 +214,17 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
                         className="bg-secondary/20 outline-none px-2 py-1 rounded-sm font-semibold"
                         value={audioStream}
                         onChange={(e) => {
-                          navigate("/playback/" + props.mediaId + "?resume=" + Math.round((props.playerRef.current?.getCurrentTime() ?? 0) * 10000000))
+                          navigate(
+                            "/playback/" +
+                              props.mediaId +
+                              "?resume=" +
+                              Math.round(
+                                (props.playerRef.current?.getCurrentTime() ??
+                                  0) * 10000000
+                              )
+                          );
                           setAudioStream(Number(e.target.value));
-                          query.invalidateQueries(props.mediaId + "-playback")
+                          query.invalidateQueries(props.mediaId + "-playback");
                         }}
                       >
                         {props.MediaStreams.filter(
@@ -225,9 +239,17 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
                         className="bg-secondary/20 outline-none px-2 py-1 rounded-sm font-semibold"
                         value={subtitleIndex}
                         onChange={(e) => {
-                          navigate("/playback/" + props.mediaId + "?resume=" + Math.round((props.playerRef.current?.getCurrentTime() ?? 0) * 10000000))
+                          navigate(
+                            "/playback/" +
+                              props.mediaId +
+                              "?resume=" +
+                              Math.round(
+                                (props.playerRef.current?.getCurrentTime() ??
+                                  0) * 10000000
+                              )
+                          );
                           setSubtitleIndex(Number(e.target.value));
-                          query.invalidateQueries(props.mediaId + "-playback")
+                          query.invalidateQueries(props.mediaId + "-playback");
                         }}
                       >
                         {props.MediaStreams.filter(
