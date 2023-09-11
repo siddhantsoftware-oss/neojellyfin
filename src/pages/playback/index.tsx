@@ -100,7 +100,6 @@ function MediaPlayback() {
     }
   );
 
-
   if (!mediaUrl) {
     return <Loading />;
   }
@@ -118,15 +117,14 @@ function MediaPlayback() {
           url={`${localStorage.getItem("address")}${
             mediaUrl.MediaSources[0].TranscodingUrl + ""
           }`}
-          
-          controls
+          playing
           playbackRate={1}
           ref={playerRef}
           width={"100%"}
           height={"100vh"}
           style={{
             backgroundColor: "black",
-            outline: '2px solid transparent'
+            outline: "2px solid transparent",
           }}
           config={{
             file: {

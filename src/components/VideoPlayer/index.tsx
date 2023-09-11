@@ -12,6 +12,21 @@ interface VideoPlayerProps {
 export const VideoPlayer = (props: VideoPlayerProps) => {
   const navigate = useNavigate();
 
+  const TimeCounter = (timeProps: { time: number; long: boolean }) => {
+    const hours = Math.floor(timeProps.time / 3600);
+    const minutes = Math.floor(timeProps.time / 60) - hours * 60;
+    const seconds = Math.floor(timeProps.time) - ((hours*3600) + (minutes*60))
+
+    return (
+      <div>
+        {timeProps.long ? "0" + hours + ":" : null}
+        {minutes < 10 ? 0 : null}
+        {minutes}:{seconds < 10 ? 0 : null}
+        {seconds}
+      </div>
+    );
+  };
+
   return (
     <div id="video-player" className="h-screen w-screen relative">
       <div className="absolute z-20 top-0 left-0 py-5 md:px-10 px-3 ">
@@ -62,6 +77,17 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
         </button>
       </div>
       <div>{props.children}</div>
+      <div className="absolute flex gap-x-2 opacity-90 bottom-0 bg-accent/70 backdrop-blur-md py-3 px-10 w-full">
+        <TimeCounter
+          long={(props.playerRef.current?.getDuration() ?? 0) > 3600}
+          time={props.playerRef.current?.getCurrentTime() ?? 0}
+        />{" "}
+        /{" "}
+        <TimeCounter
+          long={(props.playerRef.current?.getDuration() ?? 0) > 3600}
+          time={props.playerRef.current?.getDuration() ?? 0}
+        />
+      </div>
     </div>
   );
 };
