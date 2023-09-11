@@ -29,8 +29,8 @@ export interface MediaType {
     PlayedPercentage: number;
     PlaybackPositionTicks: number;
   };
-  ParentIndexNumber: number
-  IndexNumber: number
+  ParentIndexNumber: number;
+  IndexNumber: number;
 }
 
 function RecentlyAdded() {
@@ -49,18 +49,23 @@ function RecentlyAdded() {
       .then((result) => result as MediaType[])
   );
 
-  if(!data){
-    return <LoadingSpinner />
+  if (!data) {
+    return <LoadingSpinner />;
   }
 
   return (
-    <div className="flex my-10 flex-col min-h-[337.5px]  gap-y-3">
+    <div className="flex md:my-10 my-2 flex-col  gap-y-3">
       <Marquee speed={40} pauseOnHover>
         {data?.map((media, idx) => {
           const backdropTag =
-            media.BackdropImageTags?.length > 0 ? media.BackdropImageTags[0] : media.ParentBackdropImageTags?.length > 0 ? media?.ParentBackdropImageTags[0] : null;
-          const hashblur =
-            media.ImageBlurHashes?.Backdrop ? media.ImageBlurHashes.Backdrop[`${backdropTag}`] : "";
+            media.BackdropImageTags?.length > 0
+              ? media.BackdropImageTags[0]
+              : media.ParentBackdropImageTags?.length > 0
+              ? media?.ParentBackdropImageTags[0]
+              : null;
+          const hashblur = media.ImageBlurHashes?.Backdrop
+            ? media.ImageBlurHashes.Backdrop[`${backdropTag}`]
+            : "";
 
           return (
             <div
@@ -109,20 +114,19 @@ function RecentlyAdded() {
                 </div>
               </div>{" "}
               {isLoading ? (
-                <div className="h-[337.5px] absolute z-30 shrink-0 w-[600px] bg-accent animate-pulse  rounded-md"></div>
+                <div className="h-full aspect-[16/9] md:max-h-[30vh] max-h-[20vh]absolute z-30 shrink-0  bg-accent animate-pulse  rounded-md"></div>
               ) : null}
-              {
-                hashblur.length > 0? <div
-                id={hashblur}
-                className="absolute z-20 top-0 left-0 bg-black"
-              >
-                <Blurhash hash={hashblur} width={600} height={337.5} />
-              </div>: null
-              }
+              {hashblur.length > 0 ? (
+                <div
+                  id={hashblur}
+                  className="absolute z-20 top-0 left-0 bg-black"
+                >
+                  <Blurhash hash={hashblur} className="h-full aspect-[16/9] md:max-h-[30vh] max-h-[20vh]" />
+                </div>
+              ) : null}
               <div>
                 <img
-                  width={600}
-                  className="h-fit min-h-[337.5px] "
+                  className="h-full aspect-[16/9] md:max-h-[30vh] max-h-[20vh] "
                   src={`${localStorage.getItem("address")}/Items/${
                     media.SeriesId ? media.SeriesId : media.Id
                   }/Images/Backdrop`}
