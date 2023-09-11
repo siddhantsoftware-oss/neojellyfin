@@ -63,7 +63,8 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
                   EventName: "pause",
                 }),
               }
-            ).then(() => navigate(-1));
+            );
+            navigate(-1);
           }}
           className="flex gap-x-3 hover:-translate-x-2 transition"
         >
@@ -117,7 +118,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
                 max={props.playerRef.current.getDuration()}
                 value={props.playerRef.current.getCurrentTime()}
                 type="range"
-                className="w-full translate-y-[100%] absolute appearance-none bg-transparent z-50 accent-white "
+                className="w-full translate-y-[100%] cursor-pointer absolute appearance-none bg-transparent z-50 accent-white "
               />
             </div>
             <div className="flex justify-between bg-accent/70 backdrop-blur-md pb-4 pt-6 px-10 w-full">
