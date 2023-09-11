@@ -5,7 +5,7 @@ import usePlayer from "../../pages/playback/playerStore";
 
 interface VideoPlayerProps {
   children: React.JSX.Element;
-  playerRef: React.RefObject<ReactPlayer & HTMLVideoElement>;
+  playerRef: React.RefObject<ReactPlayer>;
   currentTime: number;
   mediaId: string;
   sessionId: string;
