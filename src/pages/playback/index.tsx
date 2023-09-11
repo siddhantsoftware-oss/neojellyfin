@@ -15,6 +15,8 @@ function MediaPlayback() {
 
   const [currentTime, setCurrentTime] = useState(0);
 
+
+
   const onTimeUpdate = () => {
     const ref = playerRef.current;
     if (ref) {
@@ -22,7 +24,7 @@ function MediaPlayback() {
     }
   };
 
-  const { data: mediaUrl } = useQuery(
+  const { data: media } = useQuery(
     `${mediaId}-playback`,
     () =>
       fetch(
@@ -106,14 +108,14 @@ function MediaPlayback() {
     state.setPlaying,
   ]);
 
-  if (!mediaUrl) {
+  if (!media) {
     return <Loading />;
   }
 
   return (
     <div className=" h-screen outline-none  flex place-items-center max-h-screen justify-center">
       <VideoPlayer
-        sessionId={mediaUrl.PlaySessionId}
+        sessionId={media.PlaySessionId}
         mediaId={mediaId}
         currentTime={currentTime}
         playerRef={playerRef}
@@ -121,7 +123,7 @@ function MediaPlayback() {
         <ReactPlayer
           onProgress={onTimeUpdate}
           url={`${localStorage.getItem("address")}${
-            mediaUrl.MediaSources[0].TranscodingUrl + ""
+            media.MediaSources[0].TranscodingUrl + ""
           }`}
           playsinline
           playing={playing}
@@ -157,7 +159,7 @@ function MediaPlayback() {
                   IsPaused: true,
                   EventName: "pause",
                   PlayMethod: "Transcode",
-                  PlaySessionId: mediaUrl.PlaySessionId,
+                  PlaySessionId: media.PlaySessionId,
                   PositionTicks: Math.round(
                     (playerRef.current?.getCurrentTime() ?? 0) * 1000000
                   ),
@@ -184,7 +186,7 @@ function MediaPlayback() {
                   IsPaused: false,
                   EventName: "unpause",
                   PlayMethod: "Transcode",
-                  PlaySessionId: mediaUrl.PlaySessionId,
+                  PlaySessionId: media.PlaySessionId,
                   PositionTicks: Math.round(
                     (playerRef.current?.getCurrentTime() ?? 0) * 1000000
                   ),
@@ -209,7 +211,7 @@ function MediaPlayback() {
                   CanSeek: true,
                   EventName: "timeupdate",
                   PlayMethod: "Transcode",
-                  PlaySessionId: mediaUrl.PlaySessionId,
+                  PlaySessionId: media.PlaySessionId,
                   PositionTicks: Math.round(
                     (playerRef.current?.getCurrentTime() ?? 0) * 1000000
                   ),
