@@ -89,7 +89,9 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
             <div className="z-20 absolute left-0 top-0 -translate-y-[110%] w-full">
               <input
                 onChange={(e) => {
-                  props.playerRef.current?.seekTo(e.target.valueAsNumber);
+                  if (props.playerRef.current?.seekTo) {
+                    props.playerRef.current.seekTo(e.target.valueAsNumber);
+                  }
                 }}
                 max={props.playerRef.current.getDuration()}
                 value={props.playerRef.current.getCurrentTime()}
