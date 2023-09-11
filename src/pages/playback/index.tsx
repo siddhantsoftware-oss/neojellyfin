@@ -93,7 +93,8 @@ function MediaPlayback() {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                AudioStreamIndex: 1,
+                AudioStreamIndex: audioIndex,
+                SubtitleStreamIndex: subtitleIndex,
                 CanSeek: true,
                 IsPaused: false,
                 isMuted: false,
@@ -177,7 +178,8 @@ function MediaPlayback() {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                  AudioStreamIndex: 1,
+                  AudioStreamIndex: audioIndex,
+                  SubtitleStreamIndex: subtitleIndex,
                   CanSeek: true,
                   IsPaused: true,
                   EventName: "pause",
@@ -204,7 +206,8 @@ function MediaPlayback() {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                  AudioStreamIndex: 1,
+                  AudioStreamIndex: audioIndex,
+                  SubtitleStreamIndex: subtitleIndex,
                   CanSeek: true,
                   IsPaused: false,
                   EventName: "unpause",
@@ -230,7 +233,8 @@ function MediaPlayback() {
                   "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                  AudioStreamIndex: 1,
+                  AudioStreamIndex: audioIndex,
+                  SubtitleStreamIndex: subtitleIndex,
                   CanSeek: true,
                   EventName: "timeupdate",
                   PlayMethod: "Transcode",
