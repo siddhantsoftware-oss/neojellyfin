@@ -14,7 +14,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
 
   return (
     <div id="video-player" className="h-screen w-screen relative">
-      <div className="absolute z-20 top-0 left-0 py-5 px-10 ">
+      <div className="absolute z-20 top-0 left-0 py-5 md:px-10 px-3 ">
         <button
           onClick={() => {
             fetch(

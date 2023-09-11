@@ -26,8 +26,8 @@ function NextUpMedia() {
   }
 
   return (
-    <div className="px-10 flex flex-col gap-y-3">
-      <div className="text-3xl font-semibold">Next Up</div>
+    <div className="md:px-10 px-3 flex flex-col gap-y-3">
+      <div className="md:text-3xl text-2xl font-semibold">Next Up</div>
       <div className="flex gap-x-5 overflow-x-scroll pb-5">
         {items?.map((item, key) => (
           <MediaTab key={key} media={item} />

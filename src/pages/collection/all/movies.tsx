@@ -50,7 +50,7 @@ function ViewMovieLibrary() {
   }
 
   return (
-    <div className="px-10 flex flex-col gap-y-5">
+    <div className="md:px-10 px-3 flex flex-col gap-y-5">
       <div className="text-5xl  pb-8 pt-5 font-semibold ">
         {collection.Name}
       </div>

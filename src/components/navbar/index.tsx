@@ -8,7 +8,7 @@ function Nav() {
   }
 
   return (
-    <div className="flex px-10 py-5">
+    <div className="flex md:px-10 px-3 py-5">
       <Link
         to={"/"}
         className="text-3xl font-bold hover:text-primary transition"

@@ -84,7 +84,7 @@ function MoviePage() {
           <div className="absolute bg-gradient-to-b from-background to-transparent top-0 left-0 w-full h-[20%]  "></div>
         </div>
       </div>
-      <div className="relative flex-col flex gap-y-5 z-20 px-10">
+      <div className="relative flex-col flex gap-y-5 z-20 md:px-10 px-3">
         <div className="flex items-end gap-x-5">
           <div className="drop-shadow-2xl">
             <Image

@@ -25,8 +25,8 @@ function ResumeWatching() {
   }
 
   return (
-    <div className="px-10 flex flex-col gap-y-3">
-      <div className="text-3xl font-semibold">Continue Watching</div>
+    <div className="md:px-10 px-3 flex flex-col gap-y-3">
+      <div className="md:text-3xl text-2xl font-semibold">Continue Watching</div>
       <div className="flex gap-x-5 overflow-x-scroll pb-5">
         {isLoading ? <div className="aspect-[16/9] min-w-[400px]"></div> : null}
         {data?.map((media, key) => (
@@ -40,14 +40,14 @@ function ResumeWatching() {
 export const MediaTab = ({ media }: { media: MediaType }) => {
   return (
     <div className="shrink-0 ">
-      <div className="relative aspect-[16/9] group/cover min-w-[400px]">
+      <div className="relative aspect-[16/9] group/cover md:w-[400px] w-[300px]">
         <Image
           Ratio={16 / 9}
           src={`${localStorage.getItem("address")}/Items/${media.Id}/Images/${
             media.SeriesId ? "Primary" : "Backdrop"
           }`}
           alt=""
-          className="w-[400px] rounded-md overflow-clip aspect-[16/9]"
+          className="md:w-[400px] w-[300px] rounded-md overflow-clip aspect-[16/9]"
         />
         {media.UserData.PlayedPercentage ? (
           <>
