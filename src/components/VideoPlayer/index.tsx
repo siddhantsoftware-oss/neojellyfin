@@ -107,9 +107,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
                 }}
                 className=" absolute h-[65%] translate-y-[115%] z-40 rounded-r-sm left-0 bg-secondary/40"
               ></div>
-              <div
-                className=" absolute h-[65%] w-full translate-y-[115%] z-20  left-0 bg-accent"
-              ></div>
+              <div className=" absolute h-[65%] w-full translate-y-[115%] z-20  left-0 bg-accent"></div>
               <input
                 onChange={(e) => {
                   if (props.playerRef.current?.seekTo) {
@@ -169,7 +167,20 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
                   )}
                 </button>
               </div>
-              <div>settings</div>
+              <div>
+                <select
+                  className="bg-accent px-2 py-1 rounded-sm font-semibold"
+                  name=""
+                  id=""
+                >
+                  <option value="4k">4K</option>
+                  <option value="4k">1080p</option>
+                  <option value="4k">4K</option>
+                  <option value="4k">4K</option>
+                  <option value="4k">4K</option>
+                  <option value="4k">4K</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
