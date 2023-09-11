@@ -6,6 +6,7 @@ import { useRef, useState } from "react";
 import Loading from "../../components/Loading";
 import ReactPlayer from "react-player";
 import { VideoPlayer } from "../../components/VideoPlayer";
+import usePlayer from "./playerStore";
 
 function MediaPlayback() {
   const mediaId = useLocation().pathname.replace("/playback/", "");
@@ -100,6 +101,8 @@ function MediaPlayback() {
     }
   );
 
+  const [playing] = usePlayer(state=>[state.playing])
+
   if (!mediaUrl) {
     return <Loading />;
   }
@@ -117,7 +120,8 @@ function MediaPlayback() {
           url={`${localStorage.getItem("address")}${
             mediaUrl.MediaSources[0].TranscodingUrl + ""
           }`}
-          playing
+          playsinline
+          playing={playing}
           playbackRate={1}
           ref={playerRef}
           width={"100%"}
