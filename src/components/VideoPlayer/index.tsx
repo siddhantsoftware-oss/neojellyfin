@@ -3,6 +3,7 @@ import { getAuth } from "../../pages/root";
 import { useNavigate } from "react-router-dom";
 import usePlayer from "../../pages/playback/playerStore";
 import { Popover, PopoverContent, PopoverTrigger } from "../shadcn/ui/popover";
+import { useQueryClient } from "react-query";
 
 interface VideoPlayerProps {
   children: React.JSX.Element;
@@ -36,11 +37,18 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
     );
   };
 
-  const [playing, setPlaying] = usePlayer((state) => [
-    state.playing,
-    state.setPlaying,
-  ]);
+  const [playing, setPlaying, setAudioStream, audioStream, subtitleIndex, setSubtitleIndex] = usePlayer(
+    (state) => [
+      state.playing,
+      state.setPlaying,
+      state.setAudioStreamIndex,
+      state.audioStreamIndex,
+      state.subtitleStreamIndex,
+      state.setSubtitleStreamIndex
+    ]
+  );
 
+  const query = useQueryClient()
   return (
     <div id="video-player" className="h-screen w-screen relative">
       <div className="absolute z-20 top-0 left-0 w-full bg-gradient-to-b from-black/60  h-[8vh] to-transparent py-5 md:px-10 px-3 ">
@@ -129,8 +137,8 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
                 className="w-full translate-y-[100%] cursor-pointer absolute appearance-none bg-transparent z-50 accent-white "
               />
             </div>
-            <div className="flex justify-between bg-accent/70 backdrop-blur-md pb-4 pt-6 px-10 w-full">
-              <div className="flex gap-x-1 opacity-80 ">
+            <div className="flex justify-evenly items-center bg-accent/70 backdrop-blur-md pb-4 pt-6 px-10 w-full">
+              <div className="flex gap-x-1 justify-start w-full opacity-80 ">
                 <TimeCounter
                   long={(props.playerRef.current?.getDuration() ?? 0) > 3600}
                   time={props.playerRef.current?.getCurrentTime() ?? 0}
@@ -176,7 +184,7 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
                   )}
                 </button>
               </div>
-              <div>
+              <div className="flex justify-end w-full">
                 <Popover>
                   <PopoverTrigger>
                     <div>
@@ -198,14 +206,34 @@ export const VideoPlayer = (props: VideoPlayerProps) => {
                     <div className=" grid gap-y-3">
                       <select
                         className="bg-secondary/20 outline-none px-2 py-1 rounded-sm font-semibold"
-                        name=""
-                        id=""
-                        defaultValue={props.defaultSubtitleStream}
+                        value={audioStream}
+                        onChange={(e) => {
+                          navigate("/playback/" + props.mediaId + "?resume=" + Math.round((props.playerRef.current?.getCurrentTime() ?? 0) * 10000000))
+                          setAudioStream(Number(e.target.value));
+                          query.invalidateQueries(props.mediaId + "-playback")
+                        }}
+                      >
+                        {props.MediaStreams.filter(
+                          (e) => e.Type === "Audio"
+                        ).map((stream, idx) => (
+                          <option value={stream.Index} key={idx}>
+                            {stream.DisplayTitle}
+                          </option>
+                        ))}
+                      </select>
+                      <select
+                        className="bg-secondary/20 outline-none px-2 py-1 rounded-sm font-semibold"
+                        value={subtitleIndex}
+                        onChange={(e) => {
+                          navigate("/playback/" + props.mediaId + "?resume=" + Math.round((props.playerRef.current?.getCurrentTime() ?? 0) * 10000000))
+                          setSubtitleIndex(Number(e.target.value));
+                          query.invalidateQueries(props.mediaId + "-playback")
+                        }}
                       >
                         {props.MediaStreams.filter(
                           (e) => e.Type === "Subtitle"
-                        ).map((stream) => (
-                          <option value={stream.Index} key="">
+                        ).map((stream, idx) => (
+                          <option value={stream.Index} key={idx}>
                             {stream.DisplayTitle}
                           </option>
                         ))}

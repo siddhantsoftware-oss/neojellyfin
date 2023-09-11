@@ -22,12 +22,13 @@ function MediaPlayback() {
     }
   };
 
-  const [setAudioIndex, setSubtitleIndex, audioIndex, subtitleIndex] = usePlayer((state) => [
-    state.setAudioStreamIndex,
-    state.setSubtitleStreamIndex,
-    state.audioStreamIndex,
-    state.subtitleStreamIndex,
-  ]);
+  const [setAudioIndex, setSubtitleIndex, audioIndex, subtitleIndex] =
+    usePlayer((state) => [
+      state.setAudioStreamIndex,
+      state.setSubtitleStreamIndex,
+      state.audioStreamIndex,
+      state.subtitleStreamIndex,
+    ]);
 
   const { data: media } = useQuery(
     `${mediaId}-playback`,
@@ -53,9 +54,9 @@ function MediaPlayback() {
       )
         .then((res) => res.json())
         .then((result) => {
-          setSubtitleIndex(result.MediaSources[0].DefaultSubtitleStreamIndex)
-          setAudioIndex(result.MediaSources[0].DefaultAudioStreamIndex)
-          return result
+          setSubtitleIndex(result.MediaSources[0].DefaultSubtitleStreamIndex);
+          setAudioIndex(result.MediaSources[0].DefaultAudioStreamIndex);
+          return result;
         }),
     {
       retry: false,
@@ -138,7 +139,15 @@ function MediaPlayback() {
         <ReactPlayer
           onProgress={onTimeUpdate}
           url={`${localStorage.getItem("address")}${
-            media.MediaSources[0].TranscodingUrl + ""
+            media.MediaSources[0].TranscodingUrl.replace(
+              `AudioStreamIndex=${media.MediaSources[0].DefaultAudioStreamIndex}`,
+              `AudioStreamIndex=${audioIndex}`
+            ).replace(
+              `SubtitleStream=${media.MediaSources[0].DefaultAudioStreamIndex}`,
+              ""
+            ) +
+            "&SubtitleStreamIndex=" +
+            subtitleIndex
           }`}
           playsinline
           playing={playing}
@@ -157,7 +166,6 @@ function MediaPlayback() {
           }}
           onPause={() => {
             setPlaying(false);
-
             fetch(
               `${localStorage.getItem("address")}/Sessions/Playing/Progress`,
               {
