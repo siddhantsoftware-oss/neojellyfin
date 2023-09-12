@@ -7,6 +7,8 @@ interface PlayerInterface {
   subtitleStreamIndex: number;
   setAudioStreamIndex: (newIndex: number) => void;
   setSubtitleStreamIndex: (newIndex: number) => void;
+  currentTimeWatched: number;
+  setCurrentTimeWatched: (newTime: number) => void;
 }
 
 const usePlayer = create<PlayerInterface>((set) => ({
@@ -18,12 +20,17 @@ const usePlayer = create<PlayerInterface>((set) => ({
   currentMaxBitrate: 80000,
   audioStreamIndex: 0,
   subtitleStreamIndex: 0,
-  setAudioStreamIndex: (newIndex) => set(()=>({
-    audioStreamIndex: newIndex
-  })),
-  setSubtitleStreamIndex: (newIndex) => set(()=>({
-    subtitleStreamIndex: newIndex
-  })),
+  setAudioStreamIndex: (newIndex) =>
+    set(() => ({
+      audioStreamIndex: newIndex,
+    })),
+  setSubtitleStreamIndex: (newIndex) =>
+    set(() => ({
+      subtitleStreamIndex: newIndex,
+    })),
+  currentTimeWatched: 0,
+  setCurrentTimeWatched: (newTime) =>
+    set(() => ({ currentTimeWatched: newTime })),
 }));
 
 export default usePlayer;
