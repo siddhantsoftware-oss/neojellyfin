@@ -1,5 +1,5 @@
 export const DeviceProfile = {
-    "MaxStreamingBitrate": 120000000,
+    "MaxStreamingBitrate": 12000000,
     "MaxStaticBitrate": 100000000,
     "MusicStreamingTranscodingBitrate": 384000,
     "DirectPlayProfiles": [
