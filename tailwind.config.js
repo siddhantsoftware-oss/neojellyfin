@@ -20,11 +20,11 @@ export default {
     },
     extend: {
       colors: {
-        background: "#000000",
-        text: "#ffffff",
-        primary: "#0584ff",
-        accent: "#1c1c1e",
-        secondary: "#9898a0",
+        text: "#ccdbe4",
+        background: "#1d1e1f",
+        primary: "#f22d2d",
+        secondary: "#cbcacc",
+        accent: "#2e2f30",
       },
       keyframes: {
         "accordion-down": {
